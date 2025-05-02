@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_dark"
+    android:padding="16dp"
+    tools:context=".ui.register.RegisterActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_register_image"
+            android:layout_width="39dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/apps_logo_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_register_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/clash_grotesk_regular"
+            android:text="Hey there!\nReady to"
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_register_image" />
+
+        <TextView
+            android:id="@+id/tv_register_title2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-18dp"
+            android:fontFamily="@font/clash_grotesk_regular"
+            android:text="dive in?"
+            android:textColor="@color/light_cream"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_register_title"
+            app:layout_constraintStart_toEndOf="@id/tv_register_title" />
+
+
+        <!--        <com.google.android.material.card.MaterialCardView-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="32dp"-->
+        <!--            android:backgroundTint="@color/cardview_light_background"-->
+        <!--            app:cardCornerRadius="18dp"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:strokeWidth="1dp">-->
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="@color/auth_card_bg_color"
+            app:cardCornerRadius="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_register_title"
+            app:strokeColor="@color/light_cream"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="25dp"
+                android:paddingVertical="50dp">
+
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/clash_grotesk_regular"
+                    android:text="Username"
+                    android:textColor="@color/light_cream"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputUsernameLogin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_username"
+                    app:startIconDrawable="@drawable/ic_person">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_username_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/light_cream"
+                        android:backgroundTintMode="add"
+                        android:fontFamily="@font/clash_grotesk"
+                        android:hint="Username"
+                        android:maxLength="20"
+                        android:inputType="text"
+                        android:paddingVertical="18dp"
+                        android:paddingStart="50dp"
+                        app:errorEnabled="true"
+                        tools:ignore="DuplicateSpeakableTextCheck,RtlSymmetry,TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tv_email_register"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/clash_grotesk_regular"
+                    android:text="Email"
+                    android:textColor="@color/light_cream"
+                    app:layout_constraintStart_toStartOf="@id/tv_username"
+                    app:layout_constraintTop_toBottomOf="@id/textInputUsernameLogin" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputEmailLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_email_register"
+                    app:startIconDrawable="@drawable/ic_email">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_email_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/light_cream"
+                        android:backgroundTintMode="add"
+                        android:fontFamily="@font/clash_grotesk"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:paddingVertical="18dp"
+                        android:paddingStart="50dp"
+                        app:errorEnabled="true"
+                        tools:ignore="DuplicateSpeakableTextCheck,RtlSymmetry,TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tv_password_register"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/clash_grotesk_regular"
+                    android:text="Password"
+                    android:textColor="@color/light_cream"
+                    app:layout_constraintStart_toStartOf="@id/tv_username"
+                    app:layout_constraintTop_toBottomOf="@id/textInputEmailLogin" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputPasswordLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_password_register"
+                    app:passwordToggleEnabled="true"
+                    app:startIconDrawable="@drawable/ic_lock">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_password_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/light_cream"
+                        android:backgroundTintMode="add"
+                        android:fontFamily="@font/clash_grotesk"
+                        android:hint="@string/prompt_password"
+                        android:inputType="textPassword"
+                        android:paddingVertical="18dp"
+                        android:paddingStart="50dp"
+                        app:errorEnabled="true"
+                        tools:ignore="DuplicateClickableBoundsCheck,RtlSymmetry" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tv_confirm_password_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/clash_grotesk_regular"
+                    android:text="Konfirmasi Password"
+                    android:textColor="@color/light_cream"
+                    app:layout_constraintStart_toStartOf="@id/tv_username"
+                    app:layout_constraintTop_toBottomOf="@id/textInputPasswordLogin" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_confirm_password_register"
+                    app:passwordToggleEnabled="true"
+                    app:startIconDrawable="@drawable/ic_lock">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_confirm_password_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/light_cream"
+                        android:backgroundTintMode="add"
+                        android:fontFamily="@font/clash_grotesk"
+                        android:hint="Konfirmasi Password"
+                        android:inputType="textPassword"
+                        android:paddingVertical="18dp"
+                        android:paddingStart="50dp"
+                        app:errorEnabled="true"
+                        tools:ignore="DuplicateClickableBoundsCheck,RtlSymmetry" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <androidx.constraintlayout.utils.widget.ImageFilterButton
+                    android:id="@+id/btn_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:backgroundTint="@color/transparent"
+                    android:src="@drawable/ic_gallery"
+                    android:tint="@color/light_cream"
+                    app:layout_constraintStart_toStartOf="@id/textInputConfirmPassword"
+                    app:layout_constraintTop_toBottomOf="@id/textInputConfirmPassword"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                <androidx.constraintlayout.utils.widget.ImageFilterButton
+                    android:id="@+id/btn_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:backgroundTint="@color/transparent"
+                    android:src="@drawable/ic_camera"
+                    android:tint="@color/light_cream"
+                    app:layout_constraintStart_toEndOf="@id/btn_gallery"
+                    app:layout_constraintTop_toTopOf="@id/btn_gallery"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_show_image"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_gallery"
+                    tools:src="@tools:sample/avatars" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:backgroundTint="@color/light_cream"
+                    android:fontFamily="@font/clash_grotesk_regular"
+                    android:paddingVertical="16dp"
+                    android:text="Daftar Akun"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_show_image" />
+
+                <TextView
+                    android:id="@+id/tv_additional"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/clash_grotesk_regular"
+                    android:gravity="center"
+                    android:minHeight="48dp"
+                    android:text="Sudah memiliki akun?"
+                    android:textColor="@color/light_cream"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/btn_register"
+                    app:layout_constraintTop_toBottomOf="@id/btn_register" />
+
+                <TextView
+                    android:id="@+id/tv_sign_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/clash_grotesk_regular"
+                    android:gravity="center"
+                    android:minHeight="48dp"
+                    android:text="Login Akun"
+                    android:textColor="@color/light_cream"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@id/tv_additional"
+                    app:layout_constraintTop_toTopOf="@id/tv_additional" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

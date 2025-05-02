@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dark_background"
+    android:padding="16dp"
+    tools:context=".ui.account.AccountFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_back_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="72dp"
+            android:background="@color/transparent"
+            android:fontFamily="@font/clash_grotesk_regular"
+            android:text="Settings"
+            android:textAllCaps="false"
+            android:textColor="@color/light_cream"
+            android:textSize="28sp"
+            app:iconTint="@color/light_cream"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--            app:icon="@drawable/ic_back_profile"-->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/profile_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="35dp"
+            android:backgroundTint="@color/light_cream"
+            app:cardCornerRadius="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_back_profile">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:padding="24dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/image_avatar"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginTop="50dp"
+                    android:src="@drawable/ic_image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ImageContrastCheck"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/text_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/clash_grotesk_regular"
+                    android:text="Username"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toEndOf="@id/image_avatar"
+                    app:layout_constraintTop_toTopOf="@id/image_avatar" />
+
+                <ImageView
+                    android:id="@+id/image_email"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/ic_email"
+                    app:layout_constraintStart_toStartOf="@id/text_name"
+                    app:layout_constraintTop_toBottomOf="@id/text_name"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/text_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/image_avatar"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/clash_grotesk_light"
+                    android:gravity="center_horizontal"
+                    android:text="example@gmail.com"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/image_email"
+                    app:layout_constraintStart_toEndOf="@id/image_email"
+                    app:layout_constraintTop_toTopOf="@id/image_email"
+                    tools:ignore="TextContrastCheck" />
+
+                <ImageView
+                    android:id="@+id/image_date_joined"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/ic_date"
+                    app:layout_constraintStart_toStartOf="@id/image_email"
+                    app:layout_constraintTop_toBottomOf="@id/image_email"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/text_date_joined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/clash_grotesk_light"
+                    android:gravity="center_horizontal"
+                    android:text="Joined Date"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/image_date_joined"
+                    app:layout_constraintStart_toEndOf="@id/image_date_joined"
+                    app:layout_constraintTop_toTopOf="@id/image_date_joined"
+                    tools:ignore="TextContrastCheck" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_edit_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    android:backgroundTint="@color/dark_green"
+                    android:contentDescription="Edit Profile"
+                    android:fontFamily="@font/clash_grotesk_regular"
+                    android:paddingVertical="16dp"
+                    android:text="Edit Profile"
+                    android:textAllCaps="false"
+                    android:textColor="@color/light_cream"
+                    android:textSize="16sp"
+                    app:cornerRadius="40dp"
+                    app:icon="@drawable/ic_edit_profile"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/light_cream"
+                    app:layout_constraintEnd_toEndOf="@id/divider_guest"
+                    app:layout_constraintStart_toStartOf="@id/divider_guest"
+                    app:layout_constraintTop_toBottomOf="@id/image_avatar"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <View
+                    android:id="@+id/divider_guest"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="17dp"
+                    android:background="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_edit_profile" />
+
+<!--                <com.google.android.material.button.MaterialButton-->
+<!--                    android:id="@+id/btn_my_report"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:layout_marginStart="-16dp"-->
+<!--                    app:iconSize="28dp"-->
+<!--                    android:background="@color/transparent"-->
+<!--                    android:fontFamily="@font/clash_grotesk_regular"-->
+<!--                    android:text="Laporan Saya"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="16sp"-->
+<!--                    app:icon="@drawable/ic_my_report"-->
+<!--                    app:iconTint="@color/black"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/divider_guest"-->
+<!--                    tools:ignore="TextSizeCheck" />-->
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:background="@color/transparent"
+                    android:fontFamily="@font/clash_grotesk_regular"
+                    android:text="Logout"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:icon="@drawable/ic_logout"
+                    app:iconSize="28dp"
+                    app:iconTint="@color/black"
+                    app:layout_constraintStart_toStartOf="@id/divider_guest"
+                    app:layout_constraintTop_toBottomOf="@id/divider_guest"
+                    tools:ignore="TextSizeCheck" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <TextView
+            android:id="@+id/text_copyright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="64dp"
+            android:fontFamily="@font/clash_grotesk_regular"
+            android:text="2025 @Pieter Tanoto"
+            android:textColor="@color/light_cream"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_card_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

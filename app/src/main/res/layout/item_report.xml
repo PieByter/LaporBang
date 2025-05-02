@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:layout_gravity="center"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="5dp"
+    app:cardCornerRadius="25dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_cream">
+
+        <ImageView
+            android:id="@+id/iv_potholes"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
+
+        <!--        android:layout_marginTop="20dp"-->
+        <TextView
+            android:id="@+id/tv_titles"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/clash_grotesk_bold"
+            android:maxLength="50"
+            android:maxLines="2"
+            android:text="Judul Laporan Lubang"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/iv_potholes"
+            app:layout_constraintTop_toTopOf="@id/iv_potholes"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/tv_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/clash_grotesk_medium"
+            android:text="Dibuat Oleh : User"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/tv_titles"
+            app:layout_constraintTop_toBottomOf="@id/tv_titles"
+            tools:ignore="TextContrastCheck" />
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/tv_coordinates"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:fontFamily="@font/clash_grotesk_medium"-->
+        <!--            android:text="Coodinates : 12.3456, 78.9101"-->
+        <!--            android:textSize="14sp"-->
+        <!--            app:layout_constraintStart_toStartOf="@id/tv_titles"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/tv_user"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            android:layout_marginEnd="10dp"-->
+        <!--            tools:ignore="TextContrastCheck" />-->
+
+        <TextView
+            android:id="@+id/tv_severity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/clash_grotesk_medium"
+            android:text="Keparahan Lubang : Sedang"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/tv_titles"
+            app:layout_constraintTop_toBottomOf="@id/tv_user"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/tv_holes_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/clash_grotesk_medium"
+            android:text="Jumlah Lubang : 1"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/tv_severity"
+            app:layout_constraintTop_toBottomOf="@id/tv_severity"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/tv_times"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/clash_grotesk_medium"
+            android:text="Dibuat : dd-mm-yyyy"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/tv_holes_count"
+            app:layout_constraintTop_toBottomOf="@id/tv_holes_count"
+            tools:ignore="TextContrastCheck" />
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/tv_diameter"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:fontFamily="@font/clash_grotesk_medium"-->
+        <!--            android:text="Diameter : 2.5m"-->
+        <!--            android:textSize="14sp"-->
+        <!--            app:layout_constraintStart_toStartOf="@id/tv_holes_count"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/tv_holes_count"-->
+        <!--            tools:ignore="TextContrastCheck" />-->
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/tv_depth"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:fontFamily="@font/clash_grotesk_medium"-->
+        <!--            android:text="Diameter : 2.5m"-->
+        <!--            android:textSize="14sp"-->
+        <!--            app:layout_constraintStart_toStartOf="@id/tv_severity"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/tv_diameter"-->
+        <!--            tools:ignore="TextContrastCheck" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

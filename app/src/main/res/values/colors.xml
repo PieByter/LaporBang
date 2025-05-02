@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="primary">#00FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="text_white">#EEEEEE</color>
+    <color name="text_black">#1a1a1a</color>
+    <color name="cyan">#71BBB2</color>
+
+    <color name="bounding_box_color">#71BBB2</color>
+    <color name="toolbar_background">#EEEEEE</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
+    <color name="bottom_sheet_background">#EEEEEE</color>
+    <color name="bottom_sheet_text_color">@android:color/black</color>
+    <color name="icActive">#FFFFFFFF</color>
+    <color name="icFocused">#DDFFFFFF</color>
+    <color name="icPressed">#AAFFFFFF</color>
+
+    <color name="light_cream">#EFE9D5</color>
+    <color name="dark_cream">#D6A393</color>
+    <color name="light_green">#71BBB2</color>
+    <color name="center_green">#497D74</color>
+    <color name="dark_green">#27445D</color>
+    <color name="auth_card_bg_color">#3E5854</color>
+    <color name="hint_text_tint">#616161</color>
+    <color name="start_icon_tint">#1E1E1E</color>
+</resources>

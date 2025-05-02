@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_location"
+        android:icon="@drawable/ic_location"
+        android:enabled="true"
+        android:title="Lokasi" />
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:enabled="true"
+        android:title="Laporan" />
+
+    <item
+        android:id="@+id/nav_camera"
+        android:icon="@drawable/ic_camera_botnav"
+        android:enabled="true"
+        android:title="Kamera" />
+
+    <item
+        android:id="@+id/nav_account"
+        android:icon="@drawable/ic_account"
+        android:enabled="true"
+        android:title="Akun" />
+
+</menu>

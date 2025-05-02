@@ -1,0 +1,16 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.LaporBang" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.LaporBang" parent="Base.Theme.LaporBang" />
+
+    <style name="BottomNavTheme" parent="Theme.MaterialComponents.Light">
+        <item name="colorSecondaryContainer">@color/light_cream</item> <!-- Yellow -->
+        <item name="colorPrimaryContainer">@color/light_cream</item>
+        <item name ="colorPrimary">@color/dark_green</item>
+    </style>
+
+</resources>
