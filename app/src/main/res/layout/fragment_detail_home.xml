@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,167 +7,223 @@
     android:background="@drawable/bg_dark"
     tools:context=".ui.home.DetailHomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="200dp"
+        android:contentDescription="Preview Potholes Location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_detail_potholes"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/ic_image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_detail_coordinates" />
+    <TextView
+        android:id="@+id/tv_detail_coordinates"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/clash_grotesk_medium"
+        android:text="Koordinat : Lat, Lng"
+        android:textAlignment="center"
+        android:textColor="@color/light_cream"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mapView"
+        tools:ignore="TextContrastCheck" />
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:contentDescription="Preview Potholes Location"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
 
-        <TextView
-            android:id="@+id/tv_detail_titles"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/clash_grotesk_bold"
-            android:text="Judul Laporan Lubang"
-            android:textSize="22sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_detail_potholes"
-            app:layout_constraintTop_toTopOf="@+id/iv_detail_potholes"
-            tools:ignore="TextContrastCheck" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mapView">
 
-        <TextView
-            android:id="@+id/tv_detail_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/clash_grotesk_medium"
-            android:text="Oleh User"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="@id/tv_detail_titles"
-            app:layout_constraintTop_toBottomOf="@id/tv_detail_titles"
-            tools:ignore="TextContrastCheck" />
-
-
-        <TextView
-            android:id="@+id/tv_detail_times"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/clash_grotesk_medium"
-            android:text="Dibuat : dd-mm-yyyy"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/tv_detail_user"
-            app:layout_constraintTop_toBottomOf="@id/tv_detail_user"
-            tools:ignore="TextContrastCheck" />
-
-        <TextView
-            android:id="@+id/tv_detail_coordinates"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/clash_grotesk_medium"
-            android:text="Koordinat : Lat, Lng"
-            android:textAlignment="center"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mapView"
-            tools:ignore="TextContrastCheck" />
-
-        <TextView
-            android:id="@+id/tv_holes_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:fontFamily="@font/clash_grotesk_medium"
-            android:text="Jumlah Lubang : 3"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@id/tv_detail_diameter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_detail_potholes"
-            tools:ignore="TextContrastCheck" />
-
-        <TextView
-            android:id="@+id/tv_detail_diameter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/clash_grotesk_medium"
-            android:text="Diameter : 25 mm"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_holes_count"
-            tools:ignore="TextContrastCheck" />
-
-        <TextView
-            android:id="@+id/tv_detail_depth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/clash_grotesk_medium"
-            android:text="Depth : 5 mm"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_detail_diameter"
-            tools:ignore="TextContrastCheck" />
-
-        <TextView
-            android:id="@+id/tv_detail_severity"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/clash_grotesk_bold"
-            android:text="Severity : High"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_detail_titles"
-            app:layout_constraintTop_toBottomOf="@id/tv_detail_depth"
-            tools:ignore="TextContrastCheck" />
+            android:layout_marginBottom="30dp"
+            android:paddingHorizontal="20dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_update_report"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:fontFamily="@font/clash_grotesk_regular"
-            android:paddingVertical="16dp"
-            android:text="Perbaharui Laporan"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:backgroundTint="@color/light_cream"
-            app:cornerRadius="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_delete_report"
-            app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/tv_detail_titles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/clash_grotesk_semibold"
+                android:text="Judul Laporan Lubang"
+                android:textAlignment="center"
+                android:textColor="@color/light_cream"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TextContrastCheck" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_delete_report"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/clash_grotesk_regular"
-            android:paddingVertical="16dp"
-            android:text="Hapus Laporan"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:backgroundTint="@color/light_cream"
-            app:cornerRadius="12dp"
-            app:layout_constraintBottom_toBottomOf="@id/btn_update_report"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_update_report"
-            app:layout_constraintTop_toTopOf="@id/btn_update_report" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_detail_potholes"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image"
+                app:layout_constraintEnd_toStartOf="@id/tv_detail_user"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_titles"
+                app:shapeAppearanceOverlay="@style/roundImageView" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/iv_detail_user"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_username"
+                app:layout_constraintEnd_toStartOf="@id/tv_detail_user"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_potholes"
+                app:layout_constraintTop_toBottomOf="@id/iv_detail_potholes"
+                app:tint="@color/light_cream" />
 
-</FrameLayout>
+            <TextView
+                android:id="@+id/tv_detail_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/clash_grotesk_medium"
+                android:text="User"
+                android:textColor="@color/light_cream"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail_user"
+                app:layout_constraintEnd_toStartOf="@id/iv_detail_times"
+                app:layout_constraintStart_toEndOf="@id/iv_detail_user"
+                app:layout_constraintTop_toTopOf="@id/iv_detail_user"
+                tools:ignore="TextContrastCheck" />
+
+
+            <ImageView
+                android:id="@+id/iv_detail_times"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_upload_report"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail_user"
+                app:layout_constraintEnd_toStartOf="@id/tv_detail_times"
+                app:layout_constraintStart_toEndOf="@id/tv_detail_user"
+                app:layout_constraintTop_toTopOf="@id/iv_detail_user"
+                app:tint="@color/light_cream" />
+
+            <TextView
+                android:id="@+id/tv_detail_times"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/clash_grotesk_medium"
+                android:text="dd-mm-yyyy"
+                android:textColor="@color/light_cream"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail_times"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_detail_times"
+                app:layout_constraintTop_toTopOf="@id/iv_detail_times"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/tv_holes_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/clash_grotesk_medium"
+                android:text="Jumlah Lubang : 3"
+                android:textAlignment="center"
+                android:textColor="@color/light_cream"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/tv_detail_diameter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_times"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/tv_detail_diameter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/clash_grotesk_medium"
+                android:text="Diameter : 25 mm"
+                android:textColor="@color/light_cream"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_holes_count"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/tv_detail_depth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/clash_grotesk_medium"
+                android:text="Depth : 5 mm"
+                android:textColor="@color/light_cream"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_diameter"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/tv_detail_severity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/clash_grotesk_semibold"
+                android:text="Tingkat Keparahan : Sedang"
+                android:textAlignment="center"
+                android:textColor="@color/light_cream"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_detail_titles"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_depth"
+                tools:ignore="TextContrastCheck" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_update_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="@font/clash_grotesk_regular"
+                android:padding="16dp"
+                android:text="Perbaharui Laporan"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:backgroundTint="@color/light_cream"
+                app:cornerRadius="12dp"
+                app:layout_constraintEnd_toStartOf="@id/btn_delete_report"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_severity" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_delete_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/clash_grotesk_regular"
+                android:padding="16dp"
+                android:paddingVertical="16dp"
+                android:text="Hapus Laporan"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:backgroundTint="@color/dark_cream"
+                app:cornerRadius="12dp"
+                app:layout_constraintBottom_toBottomOf="@id/btn_update_report"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_update_report"
+                app:layout_constraintTop_toTopOf="@id/btn_update_report" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

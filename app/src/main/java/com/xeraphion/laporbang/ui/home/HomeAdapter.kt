@@ -26,18 +26,16 @@ class HomeAdapter(
         val post = posts[position]
         with(holder.binding) {
             tvTitles.text = "${post.titles}"
-            tvUser.text = "Oleh ${post.username}"
-//            tvCoordinates.text = "Koordinat : ${post.location?.lat}, ${post.location?.lng}"
-            tvHolesCount.text = "Jumlah Lubang : ${post.holesCount} lubang"
-            tvSeverity.text = "Keparahan Lubang : ${post.severity}"
-            val dateText = if (!post.updatedAt.isNullOrEmpty() && post.updatedAt != post.createdAt) {
-                "Diperbarui: ${formatDate(post.updatedAt)}"
+            tvUser.text = "${post.username}"
+            tvHolesCount.text = "Jumlah Lubang : ${post.holesCount} Lubang"
+            tvSeverity.text = "Tingkat Keparahan : ${post.severity}"
+            val isUpdated = !post.updatedAt.isNullOrEmpty() && post.updatedAt != post.createdAt
+            tvTimes.text = if (isUpdated) {
+                formatDate(post.updatedAt)
             } else {
-                "Dibuat: ${formatDate(post.createdAt)}"
+                formatDate(post.createdAt)
             }
-            tvTimes.text = dateText
-//            tvDiameter.text = "Diameter Lubang : ${post.diameter} mm"
-//            tvDepth.text = "Kedalaman Lubang : ${post.depth} mm"
+            ivTimes.setImageResource(if (isUpdated) R.drawable.ic_update_report else R.drawable.ic_upload_report)
 
             Glide.with(root.context)
                 .load(post.imageUrl)

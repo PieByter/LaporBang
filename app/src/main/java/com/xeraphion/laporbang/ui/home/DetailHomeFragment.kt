@@ -19,14 +19,14 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.xeraphion.laporbang.R
 import com.xeraphion.laporbang.UserPreference
 import com.xeraphion.laporbang.api.ApiConfig
-import com.xeraphion.laporbang.helper.LocationHelper
 import com.xeraphion.laporbang.databinding.FragmentDetailHomeBinding
+import com.xeraphion.laporbang.helper.LocationHelper
+import com.xeraphion.laporbang.helper.formatDate
 import com.xeraphion.laporbang.response.Location
 import com.xeraphion.laporbang.response.ReportsResponseItem
 import com.xeraphion.laporbang.ui.maps.BitmapHelper
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
-import com.xeraphion.laporbang.helper.formatDate
 
 class DetailHomeFragment : Fragment() {
 
@@ -79,12 +79,20 @@ class DetailHomeFragment : Fragment() {
                         val bundle = Bundle().apply {
                             putString("reportId", reportId)
                         }
-                        findNavController().navigate(R.id.action_nav_detail_to_nav_update_report, bundle)
+                        findNavController().navigate(
+                            R.id.action_nav_detail_to_nav_update_report,
+                            bundle
+                        )
                     }
                 } catch (e: CancellationException) {
-                    Toast.makeText(requireContext(), "Operasi dibatalkan.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Operasi dibatalkan.", Toast.LENGTH_SHORT)
+                        .show()
                 } catch (e: Exception) {
-                    Toast.makeText(requireContext(), "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Terjadi kesalahan: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -101,26 +109,29 @@ class DetailHomeFragment : Fragment() {
 
     private fun setupReportDetails(report: ReportsResponseItem) {
         binding.tvDetailTitles.text = report.titles
-        binding.tvDetailUser.text = "Oleh ${report.username}"
+        binding.tvDetailUser.text = report.username
         binding.tvDetailCoordinates.text =
             "Koordinat : ${report.location?.lat}, ${report.location?.lng}"
-        binding.tvDetailSeverity.text = "Keparahan Lubang: \n ${report.severity}"
-        binding.tvHolesCount.text = "Jumlah Lubang: ${report.holesCount} lubang"
-        binding.tvDetailDiameter.text = "Diameter Lubang: ${report.diameter} mm"
-        binding.tvDetailDepth.text = "Kedalaman Lubang: ${report.depth} mm"
+        binding.tvDetailSeverity.text = "Tingkat Keparahan \n ${report.severity}"
+        binding.tvHolesCount.text = "Jumlah Lubang : ${report.holesCount} lubang"
+        binding.tvDetailDiameter.text = "Diameter Lubang : ${report.diameter} mm"
+        binding.tvDetailDepth.text = "Kedalaman Lubang : ${report.depth} mm"
 
-        // Show updatedAt if available, else createdAt
-        val dateText = if (!report.updatedAt.isNullOrEmpty() && report.updatedAt != report.createdAt) {
-            "Diperbarui: ${formatDate(report.updatedAt)}"
+        val isUpdated = !report.updatedAt.isNullOrEmpty() && report.updatedAt != report.createdAt
+        binding.tvDetailTimes.text = if (isUpdated) {
+            formatDate(report.updatedAt)
         } else {
-            "Dibuat: ${formatDate(report.createdAt)}"
+            formatDate(report.createdAt)
         }
-        binding.tvDetailTimes.text = dateText
+        binding.ivDetailTimes.setImageResource(if (isUpdated) R.drawable.ic_update_report else R.drawable.ic_upload_report)
 
         Glide.with(requireContext())
             .load(report.imageUrl)
+//            .centerCrop()
+//            .transform(RoundedCorners(12))
             .placeholder(R.drawable.ic_image)
             .into(binding.ivDetailPotholes)
+
     }
 
     private fun setupMapView(location: Location?, savedInstanceState: Bundle?) {

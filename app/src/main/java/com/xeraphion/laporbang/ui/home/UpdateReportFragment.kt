@@ -128,7 +128,11 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                     imageBitmap = BitmapFactory.decodeFile(imageFile.path) // Set imageBitmap
                     binding.ivShowImage.setImageBitmap(imageBitmap) // Display the new image
                     selectedImageFile = imageFile
-                } ?: Toast.makeText(requireContext(), "TIdak ada gambar yang dipilih", Toast.LENGTH_SHORT)
+                } ?: Toast.makeText(
+                    requireContext(),
+                    "TIdak ada gambar yang dipilih",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
 
@@ -184,15 +188,24 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         binding.tvHolesCountUpdateReport.setText(report.holesCount.toString())
         binding.tvDiameterUpdateReport.setText(report.diameter.toString())
         binding.tvDepthUpdateReport.setText(report.depth.toString())
-        binding.tvUpdateReportSeverity.text = "Keparahan: ${report.severity}"
+        binding.tvSeverityUpdateReport.text = "Tingkat Keparahan\n${report.severity}"
 
         selectedLat = report.location?.lat
         selectedLng = report.location?.lng
 
         Glide.with(requireContext())
+            .asBitmap()
             .load(report.imageUrl)
             .placeholder(R.drawable.ic_image)
-            .into(binding.ivShowImage)
+            .into(object : com.bumptech.glide.request.target.CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?) {
+                    binding.ivShowImage.setImageBitmap(resource)
+                    imageBitmap = resource // Set imageBitmap from server image
+                }
+                override fun onLoadCleared(placeholder: android.graphics.drawable.Drawable?) {
+                    // Optional: handle placeholder
+                }
+            })
 
         setupMapView(report.location)
     }
@@ -237,6 +250,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
             binding.tvCoordinatesUpdateReport.text =
                 "Koordinat : ${latLng.latitude}, ${latLng.longitude}"
         }
+        googleMap.setOnMarkerClickListener { true }
     }
 
     private fun updateReport(reportId: String) {
@@ -246,7 +260,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         val lng = selectedLng?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
 
         if (lat == null || lng == null) {
-            Toast.makeText(requireContext(), "Invalid coordinates", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Koordinat Tidak Valid", Toast.LENGTH_SHORT).show()
             return
         }
         val holesCount = binding.tvHolesCountUpdateReport.text.toString()
@@ -276,21 +290,20 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                 )
 
                 if (response.isSuccessful) {
-                    Log.d("UpdateReport", "Latitude: $lat, Longitude: $lng")
                     setFragmentResult("update_request", Bundle().apply {
                         putBoolean("isUpdated", true)
                     })
 
                     Toast.makeText(
                         requireContext(),
-                        "Report updated successfully",
+                        "Laporan berhasil diperbarui",
                         Toast.LENGTH_SHORT
                     ).show()
                     findNavController().popBackStack()
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Failed to update report: ${response.message()}",
+                        "Gagal memperbarui laporan: ${response.message()}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -313,7 +326,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Failed to fetch report: ${response.message()}",
+                        "Gagal mengambil laporan: ${response.message()}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -350,7 +363,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         val diameter = binding.tvDiameterUpdateReport.text.toString().toFloatOrNull() ?: 0f
         val depth = binding.tvDepthUpdateReport.text.toString().toFloatOrNull() ?: 0f
         val severity = classifySeverity(diameter, depth)
-        binding.tvUpdateReportSeverity.text = "Keparahan Lubang : \n$severity"
+        binding.tvSeverityUpdateReport.text = "Tingkat Keparahan\n$severity"
     }
 
     private val requestLocationPermissionLauncher: ActivityResultLauncher<String> =

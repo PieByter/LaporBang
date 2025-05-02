@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_light"
+    android:background="@drawable/bg_dark"
     tools:context=".ui.home.UpdateReportFragment">
 
     <com.google.android.gms.maps.MapView
@@ -22,7 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:autofillHints="text"
-        android:hint="Koordinat Laporan :"
+        android:text="Koordinat : "
+        android:textAlignment="center"
+        android:textColor="@color/light_cream"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mapView_update_report" />
@@ -30,30 +33,49 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mapView_update_report"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/mapView_update_report">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/et_titles_update_report"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputTitlesUpdateReport"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:autofillHints="Judul Laporan"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
                 android:hint="Judul Laporan"
-                android:inputType="text"
-                android:maxLength="50"
-                android:minHeight="48dp"
-                android:selectAllOnFocus="true"
+                android:textColorHint="@color/light_cream"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxStrokeColor="@color/light_cream"
+                app:cursorColor="@color/light_cream"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/light_cream"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_titles_update_report"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/clash_grotesk"
+                    android:inputType="textMultiLine"
+                    android:maxLength="50"
+                    android:textColor="@color/light_cream"
+                    android:textColorHint="@color/light_cream"
+                    tools:ignore="DuplicateSpeakableTextCheck,RtlSymmetry,TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.utils.widget.ImageFilterButton
                 android:id="@+id/btn_gallery_update_report"
@@ -63,9 +85,9 @@
                 android:backgroundTint="@color/transparent"
                 android:contentDescription="Gallery Button"
                 android:src="@drawable/ic_gallery"
-                android:tint="@color/dark_green"
-                app:layout_constraintStart_toStartOf="@id/et_titles_update_report"
-                app:layout_constraintTop_toBottomOf="@id/et_titles_update_report"
+                android:tint="@color/light_cream"
+                app:layout_constraintStart_toStartOf="@id/textInputTitlesUpdateReport"
+                app:layout_constraintTop_toBottomOf="@id/textInputTitlesUpdateReport"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <androidx.constraintlayout.utils.widget.ImageFilterButton
@@ -76,7 +98,7 @@
                 android:backgroundTint="@color/transparent"
                 android:contentDescription="Camera Button"
                 android:src="@drawable/ic_camera"
-                android:tint="@color/dark_green"
+                android:tint="@color/light_cream"
                 app:layout_constraintStart_toEndOf="@id/btn_gallery_update_report"
                 app:layout_constraintTop_toTopOf="@id/btn_gallery_update_report"
                 tools:ignore="TouchTargetSizeCheck" />
@@ -86,6 +108,7 @@
                 android:id="@+id/tv_input_image_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/clash_grotesk_regular"
                 android:text="Gambar Inputan"
@@ -99,9 +122,9 @@
                 android:id="@+id/iv_show_image"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
-                android:background="@color/light_cream"
+                android:background="@drawable/bg_rounded"
                 android:scaleType="fitCenter"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -113,9 +136,10 @@
                 android:id="@+id/tv_output_image_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/clash_grotesk_regular"
-                android:text="Gambar Inputan"
+                android:text="Hasil Analisis"
                 android:textColor="@color/light_cream"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@id/iv_show_image"
@@ -125,9 +149,9 @@
                 android:id="@+id/iv_result_image"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
-                android:background="@color/light_cream"
+                android:background="@drawable/bg_rounded"
                 android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -137,9 +161,9 @@
             <com.xeraphion.laporbang.helper.StaticOverlayView
                 android:id="@+id/staticOverlayView"
                 android:layout_width="match_parent"
-                android:layout_marginHorizontal="30dp"
                 android:layout_height="300dp"
-                android:background="@android:color/transparent"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/bg_rounded_transparent"
                 app:layout_constraintBottom_toBottomOf="@id/iv_result_image"
                 app:layout_constraintEnd_toEndOf="@id/iv_result_image"
                 app:layout_constraintStart_toStartOf="@id/iv_result_image"
@@ -150,14 +174,13 @@
                 android:id="@+id/btn_analyze_update_report"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginHorizontal="25dp"
+                android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="64dp"
                 android:backgroundTint="@color/light_cream"
                 android:fontFamily="@font/clash_grotesk_regular"
                 android:paddingVertical="16dp"
-                android:text="Scan"
+                android:text="Analisis Gambar"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -166,91 +189,127 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_result_image" />
 
-
-            <EditText
-                android:id="@+id/tv_holes_count_update_report"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/clash_grotesk_medium"
-                android:hint="Jumlah Lubang (satuan)"
-                android:inputType="number"
-                android:minHeight="48dp"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toStartOf="@id/tv_holes_count_report_helper"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_analyze_update_report"
-                tools:ignore="TextContrastCheck" />
-
             <TextView
-                android:id="@+id/tv_holes_count_report_helper"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="lubang jalan"
-                android:layout_marginEnd="30dp"
-                android:fontFamily="@font/clash_grotesk_medium"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_holes_count_update_report"
-                app:layout_constraintBottom_toBottomOf="@id/tv_holes_count_update_report"
-                />
-
-            <EditText
-                android:id="@+id/tv_diameter_update_report"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/clash_grotesk_medium"
-                android:hint="Diameter (mm)"
-                android:inputType="numberDecimal"
-                android:minHeight="48dp"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toStartOf="@id/tv_depth_update_report"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_holes_count_update_report"
-                tools:ignore="TextContrastCheck" />
-
-            <EditText
-                android:id="@+id/tv_depth_update_report"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:fontFamily="@font/clash_grotesk_medium"
-                android:hint="Kedalaman (mm)"
-                android:inputType="numberDecimal"
-                android:minHeight="48dp"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_diameter_update_report"
-                app:layout_constraintTop_toTopOf="@id/tv_diameter_update_report"
-                tools:ignore="TextContrastCheck" />
-
-
-            <TextView
-                android:id="@+id/tv_update_report_severity"
+                android:id="@+id/tv_severity_update_report"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/clash_grotesk_bold"
-                android:text="Keparahan Lubang :"
+                android:fontFamily="@font/clash_grotesk_semibold"
+                android:text="Tingkat Keparahan"
                 android:textAlignment="center"
-                android:textSize="30sp"
-                app:layout_constraintTop_toBottomOf="@id/tv_diameter_update_report"
+                android:textColor="@color/light_cream"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@id/btn_analyze_update_report"
                 tools:ignore="TextContrastCheck" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textHolesCountUpdateReport"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="20dp"
+                android:hint="Jumlah Lubang"
+                android:textColorHint="@color/light_cream"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxStrokeColor="@color/light_cream"
+                app:cursorColor="@color/light_cream"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/light_cream"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_severity_update_report">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_holes_count_update_report"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/clash_grotesk"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:textColor="@color/light_cream"
+                    android:textColorHint="@color/light_cream"
+                    tools:ignore="DuplicateSpeakableTextCheck,RtlSymmetry,TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputDiameterUpdateReport"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:hint="Diameter Lubang (mm)"
+                android:textColorHint="@color/light_cream"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxStrokeColor="@color/light_cream"
+                app:cursorColor="@color/light_cream"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/light_cream"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textHolesCountUpdateReport">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_diameter_update_report"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/clash_grotesk"
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    android:textColor="@color/light_cream"
+                    android:textColorHint="@color/light_cream"
+                    tools:ignore="DuplicateSpeakableTextCheck,RtlSymmetry,TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputDepthUpdateReport"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:hint="Kedalaman Lubang (mm)"
+                android:textColorHint="@color/light_cream"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxStrokeColor="@color/light_cream"
+                app:cursorColor="@color/light_cream"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/light_cream"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputDiameterUpdateReport">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_depth_update_report"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/clash_grotesk"
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    android:textColor="@color/light_cream"
+                    android:textColorHint="@color/light_cream"
+                    tools:ignore="DuplicateSpeakableTextCheck,RtlSymmetry,TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_update_report"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="25dp"
-                android:layout_marginVertical="64dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="64dp"
+                android:layout_marginBottom="30dp"
                 android:backgroundTint="@color/light_cream"
                 android:fontFamily="@font/clash_grotesk_regular"
                 android:paddingVertical="16dp"
-                android:text="Perbaharui Laporan Lubang"
+                android:text="Laporkan Lubang"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -258,7 +317,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_update_report_severity" />
+                app:layout_constraintTop_toBottomOf="@id/textInputDepthUpdateReport"  />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
@@ -269,8 +328,8 @@
         android:layout_height="48dp"
         android:layout_gravity="center"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

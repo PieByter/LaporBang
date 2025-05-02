@@ -167,6 +167,7 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                 binding.tvCoordinatesReport.text =
                     "Koordinat : ${latLng.latitude}, ${latLng.longitude}"
             }
+            googleMap.setOnMarkerClickListener { true }
         }
 
         binding.tvDiameterReport.addTextChangedListener(object : TextWatcher {
@@ -194,8 +195,8 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
     private fun submitReport() {
         val titles =
             binding.etTitlesReport.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        if (binding.etTitlesReport.text.isEmpty()) {
-            Toast.makeText(requireContext(), "Title is required", Toast.LENGTH_SHORT).show()
+        if (binding.etTitlesReport.text!!.isEmpty()) {
+            Toast.makeText(requireContext(), "Judul Tidak Boleh Kosong !!", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -214,8 +215,8 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         val holesCount = binding.tvHolesCountReport.text.toString()
             .toRequestBody("text/plain".toMediaTypeOrNull())
 
-        if (binding.tvDiameterReport.text.isEmpty() || binding.tvDepthReport.text.isEmpty() || binding.tvHolesCountReport.text.isEmpty()) {
-            Toast.makeText(requireContext(), "All fields must be filled", Toast.LENGTH_SHORT).show()
+        if (binding.tvDiameterReport.text!!.isEmpty() || binding.tvDepthReport.text!!.isEmpty() || binding.tvHolesCountReport.text!!.isEmpty()) {
+            Toast.makeText(requireContext(), "Semua Data Harus Diisi !!", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -256,7 +257,7 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                         response?.let {
                             Toast.makeText(
                                 requireContext(),
-                                "Report submitted: ${it.message}",
+                                "Laporan Terkirim: ${it.message}",
                                 Toast.LENGTH_SHORT
                             ).show()
                             findNavController().popBackStack()
@@ -310,7 +311,7 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         val depth = binding.tvDepthReport.text.toString().toFloatOrNull() ?: 0f
 
         val severity = classifySeverity(diameter, depth)
-        binding.tvReportSeverity.text = "Keparahan Lubang : \n$severity"
+        binding.tvSeverityReport.text = "Tingkat Keparahan : \n$severity"
     }
 
     override fun onError(error: String) {

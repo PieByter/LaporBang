@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="140dp"
     android:layout_gravity="center"
     android:layout_marginHorizontal="10dp"
-    android:layout_marginVertical="5dp"
+    android:layout_marginVertical="8dp"
     app:cardCornerRadius="25dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,28 +14,31 @@
         android:layout_height="match_parent"
         android:background="@color/light_cream">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_potholes"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginStart="15dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/roundCardImageView"
             tools:ignore="ContentDescription,ImageContrastCheck" />
 
-        <!--        android:layout_marginTop="20dp"-->
         <TextView
             android:id="@+id/tv_titles"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="20dp"
             android:ellipsize="end"
-            android:fontFamily="@font/clash_grotesk_bold"
+            android:fontFamily="@font/clash_grotesk_semibold"
             android:maxLength="50"
-            android:maxLines="2"
+            android:maxLines="1"
             android:text="Judul Laporan Lubang"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,37 +47,61 @@
             app:layout_constraintTop_toTopOf="@id/iv_potholes"
             tools:ignore="TextContrastCheck" />
 
+        <ImageView
+            android:id="@+id/iv_user"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="4dp"
+            android:contentDescription="User icon"
+            android:src="@drawable/ic_username"
+            app:layout_constraintStart_toStartOf="@id/tv_titles"
+            app:layout_constraintTop_toBottomOf="@id/tv_titles" />
+
         <TextView
             android:id="@+id/tv_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:fontFamily="@font/clash_grotesk_medium"
-            android:text="Dibuat Oleh : User"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/tv_titles"
-            app:layout_constraintTop_toBottomOf="@id/tv_titles"
+            android:text="Username"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_user"
+            app:layout_constraintStart_toEndOf="@id/iv_user"
+            app:layout_constraintTop_toTopOf="@id/iv_user"
             tools:ignore="TextContrastCheck" />
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/tv_coordinates"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:fontFamily="@font/clash_grotesk_medium"-->
-        <!--            android:text="Coodinates : 12.3456, 78.9101"-->
-        <!--            android:textSize="14sp"-->
-        <!--            app:layout_constraintStart_toStartOf="@id/tv_titles"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/tv_user"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            android:layout_marginEnd="10dp"-->
-        <!--            tools:ignore="TextContrastCheck" />-->
+        <ImageView
+            android:id="@+id/iv_times"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Date Icon"
+            android:src="@drawable/ic_upload_report"
+            app:layout_constraintBottom_toBottomOf="@id/iv_user"
+            app:layout_constraintStart_toEndOf="@id/tv_user"
+            app:layout_constraintTop_toTopOf="@id/iv_user" />
+
+        <TextView
+            android:id="@+id/tv_times"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/clash_grotesk_medium"
+            android:text="dd-mm-yyyy"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_user"
+            app:layout_constraintStart_toEndOf="@id/iv_times"
+            app:layout_constraintTop_toTopOf="@id/iv_user"
+            tools:ignore="TextContrastCheck" />
 
         <TextView
             android:id="@+id/tv_severity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/clash_grotesk_medium"
-            android:text="Keparahan Lubang : Sedang"
-            android:textSize="16sp"
+            android:text="Tingkat Keparahan : Sedang"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tv_titles"
             app:layout_constraintTop_toBottomOf="@id/tv_user"
             tools:ignore="TextContrastCheck" />
@@ -83,45 +110,15 @@
             android:id="@+id/tv_holes_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:fontFamily="@font/clash_grotesk_medium"
             android:text="Jumlah Lubang : 1"
-            android:textSize="16sp"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_potholes"
             app:layout_constraintStart_toStartOf="@id/tv_severity"
             app:layout_constraintTop_toBottomOf="@id/tv_severity"
             tools:ignore="TextContrastCheck" />
-
-        <TextView
-            android:id="@+id/tv_times"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/clash_grotesk_medium"
-            android:text="Dibuat : dd-mm-yyyy"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/tv_holes_count"
-            app:layout_constraintTop_toBottomOf="@id/tv_holes_count"
-            tools:ignore="TextContrastCheck" />
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/tv_diameter"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:fontFamily="@font/clash_grotesk_medium"-->
-        <!--            android:text="Diameter : 2.5m"-->
-        <!--            android:textSize="14sp"-->
-        <!--            app:layout_constraintStart_toStartOf="@id/tv_holes_count"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/tv_holes_count"-->
-        <!--            tools:ignore="TextContrastCheck" />-->
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/tv_depth"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:fontFamily="@font/clash_grotesk_medium"-->
-        <!--            android:text="Diameter : 2.5m"-->
-        <!--            android:textSize="14sp"-->
-        <!--            app:layout_constraintStart_toStartOf="@id/tv_severity"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/tv_diameter"-->
-        <!--            tools:ignore="TextContrastCheck" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

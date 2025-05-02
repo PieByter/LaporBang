@@ -12,22 +12,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.button.MaterialButton
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/btn_back_profile"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="72dp"-->
+<!--            android:background="@color/transparent"-->
+<!--            android:fontFamily="@font/clash_grotesk_regular"-->
+<!--            android:text="Settings"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="@color/light_cream"-->
+<!--            android:textSize="28sp"-->
+<!--            app:iconTint="@color/light_cream"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+        <!--            app:icon="@drawable/ic_back_profile"-->
+
+        <TextView
             android:id="@+id/btn_back_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="72dp"
+            android:layout_marginTop="82dp"
             android:background="@color/transparent"
             android:fontFamily="@font/clash_grotesk_regular"
-            android:text="Settings"
+            android:text="Laman Profil"
             android:textAllCaps="false"
+            android:textStyle="bold"
             android:textColor="@color/light_cream"
             android:textSize="28sp"
+            android:layout_marginStart="24dp"
             app:iconTint="@color/light_cream"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <!--            app:icon="@drawable/ic_back_profile"-->
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/profile_card_view"
@@ -66,14 +84,14 @@
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/clash_grotesk_regular"
                     android:text="Username"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     app:layout_constraintStart_toEndOf="@id/image_avatar"
                     app:layout_constraintTop_toTopOf="@id/image_avatar" />
 
                 <ImageView
                     android:id="@+id/image_email"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_marginTop="6dp"
                     android:src="@drawable/ic_email"
                     app:layout_constraintStart_toStartOf="@id/text_name"
@@ -89,7 +107,7 @@
                     android:fontFamily="@font/clash_grotesk_light"
                     android:gravity="center_horizontal"
                     android:text="example@gmail.com"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/image_email"
                     app:layout_constraintStart_toEndOf="@id/image_email"
@@ -98,8 +116,8 @@
 
                 <ImageView
                     android:id="@+id/image_date_joined"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:layout_marginTop="6dp"
                     android:src="@drawable/ic_date"
                     app:layout_constraintStart_toStartOf="@id/image_email"
@@ -108,13 +126,13 @@
 
                 <TextView
                     android:id="@+id/text_date_joined"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/clash_grotesk_light"
-                    android:gravity="center_horizontal"
+                    android:gravity="start"
                     android:text="Joined Date"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/image_date_joined"
                     app:layout_constraintStart_toEndOf="@id/image_date_joined"
@@ -127,10 +145,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="17dp"
                     android:backgroundTint="@color/dark_green"
-                    android:contentDescription="Edit Profile"
+                    android:contentDescription="Edit Profil"
                     android:fontFamily="@font/clash_grotesk_regular"
                     android:paddingVertical="16dp"
-                    android:text="Edit Profile"
+                    android:text="Edit Profil"
                     android:textAllCaps="false"
                     android:textColor="@color/light_cream"
                     android:textSize="16sp"

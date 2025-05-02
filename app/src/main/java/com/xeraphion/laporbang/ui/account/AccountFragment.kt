@@ -96,10 +96,10 @@ class AccountFragment : Fragment() {
 
     private fun formatDate(dateString: String?): String {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val date = dateString?.let { inputFormat.parse(it) }
         return date?.let {
-            "Bergabung ${outputFormat.format(it)}"
+            "Joined ${outputFormat.format(it)}"
         } ?: "Bergabung Tidak Diketahui"
     }
 
