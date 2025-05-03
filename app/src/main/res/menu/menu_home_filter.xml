@@ -1,10 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- res/menu/menu_home_filter.xml -->
+<?xml version="1.0" encoding="utf-8"?><!-- res/menu/menu_home_filter.xml -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_sorted_by"
+        android:icon="@drawable/ic_arrow_down"
+        android:title="Sorted By"
+        app:showAsAction="ifRoom|withText" />
+
     <item
         android:id="@+id/action_filter"
-        android:title="Filter"
         android:icon="@drawable/ic_filter"
-        app:showAsAction="ifRoom|withText"/>
+        android:title="Filter"
+        app:showAsAction="ifRoom|withText" />
+
 </menu>
