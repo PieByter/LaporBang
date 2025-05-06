@@ -93,7 +93,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         unetHelper = UnetHelper(loadUnetModel())
 
         setupImagePickers()
-        setupTextWatchers()
+//        setupTextWatchers()
 
         val report = arguments?.getParcelable<ReportsResponseItem>("report")
         report?.let {
@@ -125,8 +125,8 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
                 uri?.let {
                     val imageFile = uriToFile(it, requireContext()).reduceFileImage()
-                    imageBitmap = BitmapFactory.decodeFile(imageFile.path) // Set imageBitmap
-                    binding.ivShowImage.setImageBitmap(imageBitmap) // Display the new image
+                    imageBitmap = BitmapFactory.decodeFile(imageFile.path)
+                    binding.ivShowImage.setImageBitmap(imageBitmap)
                     selectedImageFile = imageFile
                 } ?: Toast.makeText(
                     requireContext(),
@@ -198,10 +198,14 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
             .load(report.imageUrl)
             .placeholder(R.drawable.ic_image)
             .into(object : com.bumptech.glide.request.target.CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?) {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?,
+                ) {
                     binding.ivShowImage.setImageBitmap(resource)
                     imageBitmap = resource // Set imageBitmap from server image
                 }
+
                 override fun onLoadCleared(placeholder: android.graphics.drawable.Drawable?) {
                     // Optional: handle placeholder
                 }
@@ -270,8 +274,17 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         val depth = binding.tvDepthUpdateReport.text.toString()
             .toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val imagePart = selectedImageFile?.let {
-            val reqFile = it.reduceFileImage().asRequestBody("image/*".toMediaTypeOrNull())
+//        val imagePart = selectedImageFile?.let {
+//            val reqFile = it.reduceFileImage().asRequestBody("image/*".toMediaTypeOrNull())
+//            MultipartBody.Part.createFormData("imageUrl", it.name, reqFile)
+//        }
+
+        val imageFile = lastProcessedBitmap?.let {
+            saveBitmapToFile(requireContext(), it, "result.jpg")
+        } ?: selectedImageFile
+
+        val imagePart = imageFile?.let {
+            val reqFile = it.reduceFileImage().asRequestBody("image/jpeg".toMediaTypeOrNull())
             MultipartBody.Part.createFormData("imageUrl", it.name, reqFile)
         }
 
@@ -293,7 +306,6 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                     setFragmentResult("update_request", Bundle().apply {
                         putBoolean("isUpdated", true)
                     })
-
                     Toast.makeText(
                         requireContext(),
                         "Laporan berhasil diperbarui",
@@ -337,33 +349,46 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         }
     }
 
-    private fun classifySeverity(diameter: Float, depth: Float): String {
-        val row = when {
-            depth < 25 -> 1
-            depth in 25.0..49.9 -> 2
-            else -> 3
-        }
-
-        val col = when {
-            diameter < 200 -> 1
-            diameter in 200.0..449.9 -> 2
-            else -> 3
-        }
-
-        val matrix = mapOf(
-            "1,1" to "Rendah", "1,2" to "Rendah", "1,3" to "Sedang",
-            "2,1" to "Rendah", "2,2" to "Sedang", "2,3" to "Tinggi",
-            "3,1" to "Sedang", "3,2" to "Sedang", "3,3" to "Tinggi"
-        )
-
-        return matrix["$row,$col"] ?: "Tidak diketahui"
-    }
+//    private fun classifySeverity(diameter: Float, depth: Float): String {
+//        val row = when {
+//            depth < 25 -> 1
+//            depth in 25.0..49.9 -> 2
+//            else -> 3
+//        }
+//
+//        val col = when {
+//            diameter < 200 -> 1
+//            diameter in 200.0..449.9 -> 2
+//            else -> 3
+//        }
+//
+//        val matrix = mapOf(
+//            "1,1" to "Rendah", "1,2" to "Rendah", "1,3" to "Sedang",
+//            "2,1" to "Rendah", "2,2" to "Sedang", "2,3" to "Tinggi",
+//            "3,1" to "Sedang", "3,2" to "Sedang", "3,3" to "Tinggi"
+//        )
+//
+//        return matrix["$row,$col"] ?: "Tidak diketahui"
+//    }
 
     private fun updateSeverityTextView() {
-        val diameter = binding.tvDiameterUpdateReport.text.toString().toFloatOrNull() ?: 0f
-        val depth = binding.tvDepthUpdateReport.text.toString().toFloatOrNull() ?: 0f
-        val severity = classifySeverity(diameter, depth)
-        binding.tvSeverityUpdateReport.text = "Tingkat Keparahan\n$severity"
+//        val diameter = binding.tvDiameterUpdateReport.text.toString().toFloatOrNull() ?: 0f
+//        val depth = binding.tvDepthUpdateReport.text.toString().toFloatOrNull() ?: 0f
+//        val severity = classifySeverity(diameter, depth)
+//        binding.tvSeverityUpdateReport.text = "Tingkat Keparahan\n$severity"
+
+        imageBitmap?.let { bitmap ->
+            lifecycleScope.launch(Dispatchers.Default) {
+                val maskOutput = unetHelper.runInference(bitmap)
+                val (severity, percent) = unetHelper.classifySeverityByMask(maskOutput)
+                withContext(Dispatchers.Main) {
+                    binding.tvSeverityUpdateReport.text =
+                        "Tingkat Keparahan: $severity\nLuas: %.2f%%".format(percent)
+                }
+            }
+        } ?: run {
+            binding.tvSeverityUpdateReport.text = "Tingkat Keparahan: -"
+        }
     }
 
     private val requestLocationPermissionLauncher: ActivityResultLauncher<String> =
@@ -520,6 +545,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         }
 
         showToast("Potholes detected: ${detections?.size ?: 0}")
+        updateSeverityTextView()
     }
 
     fun saveBitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File {

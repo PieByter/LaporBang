@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
 
     private var isFilteredById = false
     private var currentSort = SortType.DATE
-    private var isAscending = true
+    private var isAscending = false
     private var latestReportList: List<ReportsResponseItem> = emptyList()
 
     enum class SortType { DATE, SEVERITY, HOLES }

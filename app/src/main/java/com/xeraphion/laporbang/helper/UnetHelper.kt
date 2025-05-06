@@ -1,6 +1,10 @@
 package com.xeraphion.laporbang.helper
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.Log
 import androidx.core.graphics.scale
 import org.tensorflow.lite.Interpreter
@@ -15,9 +19,11 @@ class UnetHelper(private val unetInterpreter: Interpreter) {
     private val outputChannels = 2
     private val bytesPerFloat = 4
 
+    @Synchronized
     fun runInference(inputBitmap: Bitmap): Array<Array<Array<FloatArray>>> {
         val inputBuffer = preprocessBitmap(inputBitmap)
-        val outputBuffer = Array(1) { Array(inputHeight) { Array(inputWidth) { FloatArray(outputChannels) } } }
+        val outputBuffer =
+            Array(1) { Array(inputHeight) { Array(inputWidth) { FloatArray(outputChannels) } } }
         try {
             inputBuffer.rewind()
             unetInterpreter.run(inputBuffer, outputBuffer)
@@ -57,7 +63,8 @@ class UnetHelper(private val unetInterpreter: Interpreter) {
 
     private fun preprocessBitmap(bitmap: Bitmap): ByteBuffer {
         val resizedBitmap = bitmap.scale(inputWidth, inputHeight)
-        val byteBuffer = ByteBuffer.allocateDirect(inputWidth * inputHeight * inputChannels * bytesPerFloat)
+        val byteBuffer =
+            ByteBuffer.allocateDirect(inputWidth * inputHeight * inputChannels * bytesPerFloat)
         byteBuffer.order(ByteOrder.nativeOrder())
         val floatBuffer = byteBuffer.asFloatBuffer()
         val intValues = IntArray(inputWidth * inputHeight)
@@ -73,5 +80,28 @@ class UnetHelper(private val unetInterpreter: Interpreter) {
         }
         byteBuffer.rewind()
         return byteBuffer
+    }
+
+    fun classifySeverityByMask(maskOutput: Array<Array<Array<FloatArray>>>): Pair<String, Double> {
+        val maskHeight = maskOutput[0].size
+        val maskWidth = if (maskHeight > 0) maskOutput[0][0].size else 0
+        var foregroundCount = 0
+        val total = maskHeight * maskWidth
+        for (y in 0 until maskHeight) {
+            for (x in 0 until maskWidth) {
+                val backgroundProb = maskOutput[0][y][x][0]
+                val foregroundProb = maskOutput[0][y][x][1]
+                if (foregroundProb > backgroundProb && foregroundProb > 0.5f) {
+                    foregroundCount++
+                }
+            }
+        }
+        val percent = if (total > 0) (foregroundCount * 100.0 / total) else 0.0
+        val severity = when {
+            percent < 10.0 -> "Ringan"
+            percent < 25.0 -> "Sedang"
+            else -> "Berat"
+        }
+        return Pair(severity, percent)
     }
 }

@@ -17,7 +17,7 @@ class ApiConfig {
         private const val NGROK_BASE_URL = "https://parakeet-faithful-kangaroo.ngrok-free.app"
         private const val VERCEL_BASE_URL = "https://laporbang.vercel.app"
 
-        private const val BASE_URL = NGROK_BASE_URL
+        private const val BASE_URL = VERCEL_BASE_URL
 
         fun getApiService(token: String? = null): ApiService {
             val loggingInterceptor = HttpLoggingInterceptor().apply {

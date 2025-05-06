@@ -59,6 +59,7 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 
     private lateinit var launcherGallery: ActivityResultLauncher<String>
     private lateinit var launcherIntentCamera: ActivityResultLauncher<Uri>
+
     private var currentPhotoPath: String? = null
     private var selectedImageFile: File? = null
     private var selectedLat: Double? = null
@@ -170,6 +171,11 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
             googleMap.setOnMarkerClickListener { true }
         }
 
+        setupTextWatchers()
+        observeViewModel()
+    }
+
+    private fun setupTextWatchers() {
         binding.tvDiameterReport.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 updateSeverityTextView()
@@ -187,8 +193,6 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
-
-        observeViewModel()
     }
 
 
@@ -225,6 +229,7 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 //            MultipartBody.Part.createFormData("imageUrl", it.name, reqFile)
 //        }
         // Use processed image for upload if available
+
         val imageFile = lastProcessedBitmap?.let {
             saveBitmapToFile(requireContext(), it, "result.jpg")
         } ?: selectedImageFile
@@ -307,11 +312,22 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 
 
     private fun updateSeverityTextView() {
-        val diameter = binding.tvDiameterReport.text.toString().toFloatOrNull() ?: 0f
-        val depth = binding.tvDepthReport.text.toString().toFloatOrNull() ?: 0f
-
-        val severity = classifySeverity(diameter, depth)
-        binding.tvSeverityReport.text = "Tingkat Keparahan : \n$severity"
+//        val diameter = binding.tvDiameterReport.text.toString().toFloatOrNull() ?: 0f
+//        val depth = binding.tvDepthReport.text.toString().toFloatOrNull() ?: 0f
+//
+//        val severity = classifySeverity(diameter, depth)
+//        binding.tvSeverityReport.text = "Tingkat Keparahan : \n$severity"
+        imageBitmap?.let { bitmap ->
+            lifecycleScope.launch(Dispatchers.Default) {
+                val maskOutput = unetHelper.runInference(bitmap)
+                val (severity, percent) = unetHelper.classifySeverityByMask(maskOutput)
+                withContext(Dispatchers.Main) {
+                    binding.tvSeverityReport.text = "Tingkat Keparahan: $severity\nLuas: %.2f%%".format(percent)
+                }
+            }
+        } ?: run {
+            binding.tvSeverityReport.text = "Tingkat Keparahan: -"
+        }
     }
 
     override fun onError(error: String) {
@@ -459,6 +475,8 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         }
 
         showToast("Potholes detected: ${detections?.size ?: 0}")
+
+        updateSeverityTextView()
     }
 
     private fun showToast(message: String) {

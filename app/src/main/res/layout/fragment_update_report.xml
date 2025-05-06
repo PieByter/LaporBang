@@ -309,7 +309,7 @@
                 android:backgroundTint="@color/light_cream"
                 android:fontFamily="@font/clash_grotesk_regular"
                 android:paddingVertical="16dp"
-                android:text="Laporkan Lubang"
+                android:text="Perbaharui Laporan"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="16sp"

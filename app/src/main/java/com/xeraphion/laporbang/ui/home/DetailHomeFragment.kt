@@ -105,6 +105,21 @@ class DetailHomeFragment : Fragment() {
                 }
             }
         }
+
+        parentFragmentManager.setFragmentResultListener("update_request", viewLifecycleOwner) { _, bundle ->
+            val isUpdated = bundle.getBoolean("isUpdated", false)
+            if (isUpdated) {
+                val reportId = arguments?.getParcelable<ReportsResponseItem>("report")?.id
+                reportId?.let {
+                    fetchReportDetails(it) { updatedReport ->
+                        updatedReport?.let { report ->
+                            setupReportDetails(report)
+                            setupMapView(report.location, null)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setupReportDetails(report: ReportsResponseItem) {
