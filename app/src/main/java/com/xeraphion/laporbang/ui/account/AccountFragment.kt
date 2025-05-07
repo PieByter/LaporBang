@@ -91,7 +91,10 @@ class AccountFragment : Fragment() {
             putString("profileImagePath", profileImage)
         }
 
-        findNavController().navigate(R.id.action_nav_account_to_nav_update_account, bundle)
+//        findNavController().navigate(R.id.action_nav_account_to_nav_update_account, bundle)
+        val editAccountFragment = EditAccountFragment()
+        editAccountFragment.arguments = bundle
+        editAccountFragment.show(parentFragmentManager, "EditAccountFragment")
     }
 
     private fun formatDate(dateString: String?): String {

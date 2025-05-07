@@ -12,7 +12,7 @@
 <!--        android:angle="90" />-->
 
     <corners
-        android:topLeftRadius="40dp"
-        android:topRightRadius="40dp" />
+        android:topLeftRadius="26dp"
+        android:topRightRadius="26dp" />
 
 </shape>

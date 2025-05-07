@@ -3,6 +3,10 @@ package com.xeraphion.laporbang.ui.report
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -51,6 +55,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.channels.FileChannel
+import androidx.core.graphics.createBitmap
 
 class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 
@@ -369,6 +374,8 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 
             binding.staticOverlayView.setResults(tfliteResults, overlayWidth, overlayHeight)
         }
+
+        processDetections(results, imageBitmap!!)
     }
 
     private fun loadUnetModel(): Interpreter {
@@ -547,6 +554,44 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
         }
         return file
+    }
+
+    // 1. Detect lane width in pixels (simple grayscale + edge detection)
+    fun getLaneWidthPixels(bitmap: Bitmap): Float? {
+        val gray = createBitmap(bitmap.width, bitmap.height)
+        val canvas = Canvas(gray)
+        val paint = Paint()
+        val colorMatrix = ColorMatrix()
+        colorMatrix.setSaturation(0f)
+        val filter = ColorMatrixColorFilter(colorMatrix)
+        paint.colorFilter = filter
+        canvas.drawBitmap(bitmap, 0f, 0f, paint)
+
+        // You can use OpenCV for Android for better edge/line detection if needed
+        // For now, just return null (stub)
+        return null
+    }
+
+    // 2. After detection, calculate diameter in cm
+    fun processDetections(
+        detections: List<ObjectDetection>,
+        bitmap: Bitmap,
+        realLaneWidthCm: Float = 300f,
+    ) {
+        val laneWidthPixels = getLaneWidthPixels(bitmap) ?: return
+        val pixelsPerCm = laneWidthPixels / realLaneWidthCm
+
+        detections.forEach { detection ->
+            if (detection.category.label == "pothole") {
+                val bbox = detection.boundingBox
+                val diameterPixels = bbox.right - bbox.left
+                val diameterCm = diameterPixels / pixelsPerCm
+
+                // Show or store diameterCm as needed
+                // Example: update UI
+                binding.tvDiameterReport.setText("%.2f".format(diameterCm))
+            }
+        }
     }
 
 

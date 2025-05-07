@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xeraphion.laporbang.R
 import com.xeraphion.laporbang.UserPreference
 import com.xeraphion.laporbang.databinding.FragmentEditAccountBinding
@@ -30,7 +31,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.File
 
-class EditAccountFragment : Fragment() {
+class EditAccountFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentEditAccountBinding? = null
     private val binding get() = _binding!!
@@ -174,7 +175,8 @@ class EditAccountFragment : Fragment() {
                 val successMessage = response.body()?.message ?: "Update successful"
                 Toast.makeText(requireContext(), successMessage, Toast.LENGTH_SHORT).show()
                 setFragmentResult("editProfileKey", bundleOf("isProfileUpdated" to true))
-                findNavController().navigate(R.id.action_nav_update_account_to_nav_account)
+//                findNavController().navigate(R.id.action_nav_update_account_to_nav_account)
+                dismiss()
             } else {
                 val errorBody = response.errorBody()?.string()
                 val errorMessage = try {
