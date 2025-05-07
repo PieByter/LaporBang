@@ -16,6 +16,7 @@ class ReportRepository(private val apiService: ApiService) {
         depth: RequestBody,
         holesCount: RequestBody,
         image: MultipartBody.Part?,
+        segmentationPercentage: RequestBody,
     ): Response<CreateResponse> {
         return apiService.createReport(
             titles = titles,
@@ -25,6 +26,7 @@ class ReportRepository(private val apiService: ApiService) {
             depth = depth,
             imageUrl = image,
             holesCount = holesCount,
+            segmentationPercentage = segmentationPercentage,
         )
     }
 }

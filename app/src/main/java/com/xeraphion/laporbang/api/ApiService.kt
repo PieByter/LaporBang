@@ -64,6 +64,7 @@ interface ApiService {
         @Part("diameter") diameter: RequestBody,
         @Part("depth") depth: RequestBody,
         @Part("holesCount") holesCount: RequestBody,
+        @Part("segmentationPercentage") segmentationPercentage: RequestBody,
         @Part imageUrl: MultipartBody.Part? = null,
     ): Response<CreateResponse>
 
@@ -77,6 +78,7 @@ interface ApiService {
         @Part("holesCount") holesCount: RequestBody?,
         @Part("diameter") diameter: RequestBody?,
         @Part("depth") depth: RequestBody?,
+        @Part("segmentationPercentage") segmentationPercentage: RequestBody?,
         @Part imageUrl: MultipartBody.Part? = null
     ): Response<ReportsResponseItem>
 

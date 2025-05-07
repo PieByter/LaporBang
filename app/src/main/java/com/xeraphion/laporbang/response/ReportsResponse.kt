@@ -29,4 +29,5 @@ data class ReportsResponseItem(
 	val titles: String? = null,
 	val userId: String? = null,
 	val username: String? = null,
+	val segmentationPercentage: Float? = null,
 ) : Parcelable

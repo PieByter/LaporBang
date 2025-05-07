@@ -71,6 +71,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
     private lateinit var objectDetectorHelper: StaticDetectorHelper
     private lateinit var unetHelper: UnetHelper
     private var lastProcessedBitmap: Bitmap? = null
+    private var segmentationPercentageValue: Float? = null
 
     private lateinit var locationHelper: LocationHelper
     private lateinit var googleMap: GoogleMap
@@ -188,7 +189,10 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         binding.tvHolesCountUpdateReport.setText(report.holesCount.toString())
         binding.tvDiameterUpdateReport.setText(report.diameter.toString())
         binding.tvDepthUpdateReport.setText(report.depth.toString())
-        binding.tvSeverityUpdateReport.text = "Tingkat Keparahan\n${report.severity}"
+        segmentationPercentageValue = report.segmentationPercentage
+        binding.tvSegmentationPercentageUpdateReport.text =
+            "Persentase Segmentasi: %.2f%%".format(report.segmentationPercentage ?: 0.0)
+        binding.tvSeverityUpdateReport.text = "Tingkat Keparahan: ${report.severity}"
 
         selectedLat = report.location?.lat
         selectedLng = report.location?.lng
@@ -279,6 +283,15 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 //            MultipartBody.Part.createFormData("imageUrl", it.name, reqFile)
 //        }
 
+        val segmentationPercentage = segmentationPercentageValue
+            ?.toString()
+            ?.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        if (segmentationPercentage == null) {
+            Toast.makeText(requireContext(), "Segmentation percentage is missing!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val imageFile = lastProcessedBitmap?.let {
             saveBitmapToFile(requireContext(), it, "result.jpg")
         } ?: selectedImageFile
@@ -299,7 +312,8 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                     holesCount = holesCount,
                     diameter = diameter,
                     depth = depth,
-                    imageUrl = imagePart
+                    imageUrl = imagePart,
+                    segmentationPercentage = segmentationPercentage
                 )
 
                 if (response.isSuccessful) {
@@ -382,12 +396,15 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                 val maskOutput = unetHelper.runInference(bitmap)
                 val (severity, percent) = unetHelper.classifySeverityByMask(maskOutput)
                 withContext(Dispatchers.Main) {
-                    binding.tvSeverityUpdateReport.text =
-                        "Tingkat Keparahan: $severity\nLuas: %.2f%%".format(percent)
+                    segmentationPercentageValue = percent.toFloat()
+                    binding.tvSeverityUpdateReport.text = "Tingkat Keparahan: $severity"
+                    binding.tvSegmentationPercentageUpdateReport.text = "Persentase Segmentasi: %.2f%%".format(percent)
                 }
             }
         } ?: run {
+            segmentationPercentageValue = null
             binding.tvSeverityUpdateReport.text = "Tingkat Keparahan: -"
+            binding.tvSegmentationPercentageUpdateReport.text = "Persentase Segmentasi: -"
         }
     }
 

@@ -127,7 +127,8 @@ class DetailHomeFragment : Fragment() {
         binding.tvDetailUser.text = report.username
         binding.tvDetailCoordinates.text =
             "Koordinat : ${report.location?.lat}, ${report.location?.lng}"
-        binding.tvDetailSeverity.text = "Tingkat Keparahan \n ${report.severity}"
+        binding.tvDetailSeverity.text = "Tingkat Keparahan : ${report.severity}"
+        binding.tvDetailSegmentationPercentage.text = "Persentase Segmentasi : ${String.format("%.2f", report.segmentationPercentage ?: 0.0)}%"
         binding.tvHolesCount.text = "Jumlah Lubang : ${report.holesCount} lubang"
         binding.tvDetailDiameter.text = "Diameter Lubang : ${report.diameter} mm"
         binding.tvDetailDepth.text = "Kedalaman Lubang : ${report.depth} mm"

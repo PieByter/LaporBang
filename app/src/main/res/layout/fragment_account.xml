@@ -12,20 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/btn_back_profile"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="72dp"-->
-<!--            android:background="@color/transparent"-->
-<!--            android:fontFamily="@font/clash_grotesk_regular"-->
-<!--            android:text="Settings"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:textColor="@color/light_cream"-->
-<!--            android:textSize="28sp"-->
-<!--            app:iconTint="@color/light_cream"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--            android:id="@+id/btn_back_profile"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="72dp"-->
+        <!--            android:background="@color/transparent"-->
+        <!--            android:fontFamily="@font/clash_grotesk_regular"-->
+        <!--            android:text="Settings"-->
+        <!--            android:textAllCaps="false"-->
+        <!--            android:textColor="@color/light_cream"-->
+        <!--            android:textSize="28sp"-->
+        <!--            app:iconTint="@color/light_cream"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <!--            app:icon="@drawable/ic_back_profile"-->
 
@@ -33,15 +33,15 @@
             android:id="@+id/btn_back_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="82dp"
             android:background="@color/transparent"
             android:fontFamily="@font/clash_grotesk_regular"
             android:text="Laman Profil"
             android:textAllCaps="false"
-            android:textStyle="bold"
             android:textColor="@color/light_cream"
             android:textSize="28sp"
-            android:layout_marginStart="24dp"
+            android:textStyle="bold"
             app:iconTint="@color/light_cream"
             app:layout_constraintStart_toStartOf="parent"
 
@@ -171,24 +171,24 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btn_edit_profile" />
 
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/btn_my_report"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="32dp"-->
-<!--                    android:layout_marginStart="-16dp"-->
-<!--                    app:iconSize="28dp"-->
-<!--                    android:background="@color/transparent"-->
-<!--                    android:fontFamily="@font/clash_grotesk_regular"-->
-<!--                    android:text="Laporan Saya"-->
-<!--                    android:textAllCaps="false"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="16sp"-->
-<!--                    app:icon="@drawable/ic_my_report"-->
-<!--                    app:iconTint="@color/black"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/divider_guest"-->
-<!--                    tools:ignore="TextSizeCheck" />-->
+                <!--                <com.google.android.material.button.MaterialButton-->
+                <!--                    android:id="@+id/btn_my_report"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginTop="32dp"-->
+                <!--                    android:layout_marginStart="-16dp"-->
+                <!--                    app:iconSize="28dp"-->
+                <!--                    android:background="@color/transparent"-->
+                <!--                    android:fontFamily="@font/clash_grotesk_regular"-->
+                <!--                    android:text="Laporan Saya"-->
+                <!--                    android:textAllCaps="false"-->
+                <!--                    android:textColor="@color/black"-->
+                <!--                    android:textSize="16sp"-->
+                <!--                    app:icon="@drawable/ic_my_report"-->
+                <!--                    app:iconTint="@color/black"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@id/divider_guest"-->
+                <!--                    tools:ignore="TextSizeCheck" />-->
 
 
                 <com.google.android.material.button.MaterialButton

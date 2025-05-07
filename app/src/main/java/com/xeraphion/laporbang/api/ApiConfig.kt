@@ -11,13 +11,10 @@ import java.util.concurrent.TimeUnit
 class ApiConfig {
 
     companion object {
-        private const val LOCAL_BASE_URL = "http://192.168.1.7:3000"
-        private const val  PHONE_BASE_URL = "http://0.0.0.0:3000"
-        private  const val PHONE_BASE_URL2 = "http://192.168.30.11:3000"
         private const val NGROK_BASE_URL = "https://parakeet-faithful-kangaroo.ngrok-free.app"
         private const val VERCEL_BASE_URL = "https://laporbang.vercel.app"
 
-        private const val BASE_URL = VERCEL_BASE_URL
+        private const val BASE_URL = NGROK_BASE_URL
 
         fun getApiService(token: String? = null): ApiService {
             val loggingInterceptor = HttpLoggingInterceptor().apply {

@@ -169,6 +169,16 @@
                 app:layout_constraintStart_toStartOf="@id/iv_result_image"
                 app:layout_constraintTop_toTopOf="@id/iv_result_image" />
 
+            <ProgressBar
+                android:id="@+id/progressBar_scan"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/iv_result_image"
+                app:layout_constraintEnd_toEndOf="@id/iv_result_image"
+                app:layout_constraintStart_toStartOf="@id/iv_result_image"
+                app:layout_constraintTop_toTopOf="@id/iv_result_image" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_analyze_update_report"
@@ -195,11 +205,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/clash_grotesk_semibold"
-                android:text="Tingkat Keparahan"
+                android:text="Tingkat Keparahan: "
                 android:textAlignment="center"
                 android:textColor="@color/light_cream"
                 android:textSize="20sp"
                 app:layout_constraintTop_toBottomOf="@id/btn_analyze_update_report"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/tv_segmentation_percentage_update_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/clash_grotesk_semibold"
+                android:text="Persentase Segmentasi: "
+                android:textAlignment="center"
+                android:textColor="@color/light_cream"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/tv_severity_update_report"
                 tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -220,7 +243,7 @@
                 app:hintTextColor="@color/light_cream"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_severity_update_report">
+                app:layout_constraintTop_toBottomOf="@id/tv_segmentation_percentage_update_report">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tv_holes_count_update_report"
@@ -317,19 +340,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textInputDepthUpdateReport"  />
+                app:layout_constraintTop_toBottomOf="@id/textInputDepthUpdateReport" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <ProgressBar
-        android:id="@+id/progressBar_scan"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

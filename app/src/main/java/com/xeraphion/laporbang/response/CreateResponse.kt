@@ -19,6 +19,7 @@ data class Report(
 	val location: Location? = null,
 	val id: String? = null,
 	val username: String? = null,
-	val updatedAt: Any? = null
+	val updatedAt: Any? = null,
+	val segmentationPercentage: Float? = null,
 )
 

@@ -24,15 +24,16 @@ class ReportViewModel(private val repository: ReportRepository) : ViewModel() {
         diameter: RequestBody,
         depth: RequestBody,
         holesCount: RequestBody,
-        image: MultipartBody.Part?
+        image: MultipartBody.Part?,
+        segmentationPercentage: RequestBody,
     ) {
         viewModelScope.launch {
             try {
                 val response = repository.submitReport(
-                    titles, lat, lng, diameter, depth, holesCount, image
+                    titles, lat, lng, diameter, depth, holesCount, image, segmentationPercentage
                 )
                 if (response.isSuccessful) {
-                    _reportState.value = response.body() // Extract the Response object
+                    _reportState.value = response.body()
                 } else {
                     _errorState.value = response.errorBody()?.string() ?: "Unknown error"
                 }

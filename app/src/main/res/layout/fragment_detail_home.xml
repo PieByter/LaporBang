@@ -34,7 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -140,10 +139,26 @@
                 android:textAlignment="center"
                 android:textColor="@color/light_cream"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@id/tv_detail_diameter"
+                app:layout_constraintBottom_toTopOf="@id/tv_detail_segmentation_percentage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_detail_times"
+                tools:ignore="TextContrastCheck" />
+
+
+            <TextView
+                android:id="@+id/tv_detail_segmentation_percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/clash_grotesk_medium"
+                android:text="Persentase Segmentasi : 50%"
+                android:textAlignment="center"
+                android:textColor="@color/light_cream"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_holes_count"
                 tools:ignore="TextContrastCheck" />
 
             <TextView
@@ -157,7 +172,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_holes_count"
+                app:layout_constraintTop_toBottomOf="@+id/tv_detail_segmentation_percentage"
                 tools:ignore="TextContrastCheck" />
 
             <TextView
@@ -188,6 +203,7 @@
                 app:layout_constraintStart_toStartOf="@id/tv_detail_titles"
                 app:layout_constraintTop_toBottomOf="@id/tv_detail_depth"
                 tools:ignore="TextContrastCheck" />
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_update_report"

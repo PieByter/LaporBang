@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.createBitmap
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -55,7 +56,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.channels.FileChannel
-import androidx.core.graphics.createBitmap
 
 class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 
@@ -73,6 +73,7 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
     private lateinit var objectDetectorHelper: StaticDetectorHelper
     private lateinit var unetHelper: UnetHelper
     private var lastProcessedBitmap: Bitmap? = null
+    private var segmentationPercentageValue: Float? = null
 
     private val viewModel: ReportViewModel by viewModels {
         val userPreference = UserPreference.getInstance(requireContext())
@@ -106,7 +107,11 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                     binding.ivShowImage.setImageURI(Uri.fromFile(imageFile))
                     selectedImageFile = imageFile
                     imageBitmap = BitmapFactory.decodeFile(imageFile.path)
-                } ?: Toast.makeText(requireContext(), "TIdak ada gambar yang dipilih", Toast.LENGTH_SHORT)
+                } ?: Toast.makeText(
+                    requireContext(),
+                    "TIdak ada gambar yang dipilih",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
 
@@ -205,7 +210,8 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         val titles =
             binding.etTitlesReport.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         if (binding.etTitlesReport.text!!.isEmpty()) {
-            Toast.makeText(requireContext(), "Judul Tidak Boleh Kosong !!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Judul Tidak Boleh Kosong !!", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -233,7 +239,19 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 //            val reqFile = it.reduceFileImage().asRequestBody("image/*".toMediaTypeOrNull())
 //            MultipartBody.Part.createFormData("imageUrl", it.name, reqFile)
 //        }
-        // Use processed image for upload if available
+
+        val segmentationPercentage = segmentationPercentageValue
+            ?.toString()
+            ?.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        if (segmentationPercentage == null) {
+            Toast.makeText(
+                requireContext(),
+                "Segmentation percentage is missing!",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
 
         val imageFile = lastProcessedBitmap?.let {
             saveBitmapToFile(requireContext(), it, "result.jpg")
@@ -245,7 +263,7 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         }
 
         viewModel.submitReport(
-            titles, lat, lng, diameter, depth, holesCount, imagePart
+            titles, lat, lng, diameter, depth, holesCount, imagePart, segmentationPercentage
         )
     }
 
@@ -327,11 +345,16 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                 val maskOutput = unetHelper.runInference(bitmap)
                 val (severity, percent) = unetHelper.classifySeverityByMask(maskOutput)
                 withContext(Dispatchers.Main) {
-                    binding.tvSeverityReport.text = "Tingkat Keparahan: $severity\nLuas: %.2f%%".format(percent)
+                    binding.tvSeverityReport.text = "Tingkat Keparahan: $severity"
+                    segmentationPercentageValue = percent.toFloat()
+                    binding.tvSegmentationPercentageReport.text =
+                        "Persentase Segmentasi: %.2f%%".format(percent)
                 }
             }
         } ?: run {
+            segmentationPercentageValue = null
             binding.tvSeverityReport.text = "Tingkat Keparahan: -"
+            binding.tvSegmentationPercentageReport.text = "Persentase Segmentasi: -"
         }
     }
 
