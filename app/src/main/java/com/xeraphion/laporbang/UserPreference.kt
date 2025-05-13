@@ -42,6 +42,7 @@ class UserPreference(private val context: Context) {
             .first()
 
     }
+
     suspend fun saveUserId(userId: String) {
         context.dataStore.edit { preferences ->
             preferences[USER_ID_KEY] = userId
@@ -74,7 +75,4 @@ class UserPreference(private val context: Context) {
             it.remove(IS_ADMIN_KEY)
         }
     }
-
-
-
 }

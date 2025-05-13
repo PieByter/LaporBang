@@ -472,7 +472,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
     private fun loadUnetModel(): Interpreter {
         return try {
             val assetManager = requireContext().assets
-            val fd = assetManager.openFd("unet_float32_metadata.tflite")
+            val fd = assetManager.openFd("unet_float32_new.tflite")
             val inputStream = FileInputStream(fd.fileDescriptor)
             val channel = inputStream.channel
             val startOffset = fd.startOffset

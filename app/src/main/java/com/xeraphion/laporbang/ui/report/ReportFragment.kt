@@ -404,7 +404,7 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
     private fun loadUnetModel(): Interpreter {
         return try {
             val assetManager = requireContext().assets
-            val fd = assetManager.openFd("unet_float32_metadata.tflite")
+            val fd = assetManager.openFd("unet_float32_new.tflite")
             val inputStream = FileInputStream(fd.fileDescriptor)
             val channel = inputStream.channel
             val startOffset = fd.startOffset
@@ -570,7 +570,6 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 //        return resultBitmap
 //    }
 
-    // Save bitmap to file (JPG)
     fun saveBitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File {
         val file = File(context.cacheDir, fileName)
         FileOutputStream(file).use { out ->
@@ -595,13 +594,17 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         return null
     }
 
-    // 2. After detection, calculate diameter in cm
     fun processDetections(
         detections: List<ObjectDetection>,
         bitmap: Bitmap,
         realLaneWidthCm: Float = 300f,
     ) {
-        val laneWidthPixels = getLaneWidthPixels(bitmap) ?: return
+        val laneWidthPixels = getLaneWidthPixels(bitmap)
+        if (laneWidthPixels == null) {
+            binding.tvDiameterReport.text = Editable.Factory.getInstance().newEditable("Lane width not detected")
+            return
+        }
+
         val pixelsPerCm = laneWidthPixels / realLaneWidthCm
 
         detections.forEach { detection ->
@@ -610,9 +613,8 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                 val diameterPixels = bbox.right - bbox.left
                 val diameterCm = diameterPixels / pixelsPerCm
 
-                // Show or store diameterCm as needed
-                // Example: update UI
-                binding.tvDiameterReport.setText("%.2f".format(diameterCm))
+                // Update UI with the calculated diameter
+                binding.tvDiameterReport.text = Editable.Factory.getInstance().newEditable("%.2f cm".format(diameterCm))
             }
         }
     }

@@ -18,11 +18,12 @@ class TaskVisionDetector(
 
     init {
 
-        val modelName =
-            when (currentModel) {
-                MODEL_YOLO -> "yolov11_float32.tflite"
-                else -> "yolov11_float32.tflite"
-            }
+//        val modelName =
+//            when (currentModel) {
+//                MODEL_YOLO -> "yolov11_float32.tflite"
+//                else -> "yolov11_float32.tflite"
+//            }
+        val modelName = "yolov11_float32.tflite"
 
         objectDetector = ObjectDetector.createFromFileAndOptions(context, modelName, options)
 

@@ -40,9 +40,12 @@ class AccountFragment : Fragment() {
             ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
         )[AccountViewModel::class.java]
 
+        binding.progressBar.visibility = View.VISIBLE
+
         viewModel.fetchUserData()
 
         viewModel.user.observe(viewLifecycleOwner) { user ->
+            binding.progressBar.visibility = View.GONE
             binding.textName.text = user.username
             binding.textEmail.text = user.email
             binding.textDateJoined.text = formatDate(user.createdAt)
