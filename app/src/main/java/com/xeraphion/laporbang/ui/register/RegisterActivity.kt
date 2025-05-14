@@ -38,7 +38,6 @@ class RegisterActivity : AppCompatActivity() {
         private const val CAMERA_PERMISSION_CODE = 100
     }
 
-
     private val viewModel: RegisterViewModel by viewModels {
         val apiService = ApiConfig.getApiService()
         val repository = RegisterRepository(apiService)
@@ -90,12 +89,12 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                Toast.makeText(this, "Semua field wajib diisi", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Semua kolom wajib diisi!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (password != confirmPassword) {
-                Toast.makeText(this, "Password tidak cocok", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Password tidak cocok!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -117,7 +116,7 @@ class RegisterActivity : AppCompatActivity() {
                 confirmPasswordPart,
                 imagePart,
                 onSuccess = {
-                    Toast.makeText(this, "Registrasi berhasil", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Registrasi akun berhasil!", Toast.LENGTH_SHORT).show()
                     finish()
                 },
                 onError = { errorMessage ->

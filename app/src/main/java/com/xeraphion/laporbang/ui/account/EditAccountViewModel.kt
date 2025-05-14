@@ -26,7 +26,7 @@ class EditAccountViewModel(private val token: String) : ViewModel() {
             try {
                 val apiService = ApiConfig.getApiService(token)
                 val response = apiService.updateAccount(username, newPassword, currentPassword, profileImage)
-                _editProfileResponse.value = response // Directly assign the response
+                _editProfileResponse.value = response
                 _isProfileUpdated.value = response.isSuccessful
             } catch (e: Exception) {
                 e.printStackTrace()

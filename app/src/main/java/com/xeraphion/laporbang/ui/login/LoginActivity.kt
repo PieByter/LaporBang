@@ -14,6 +14,7 @@ import com.xeraphion.laporbang.UserPreference
 import com.xeraphion.laporbang.databinding.ActivityLoginBinding
 import com.xeraphion.laporbang.ui.register.RegisterActivity
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
@@ -42,9 +43,9 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.etEmailLogin.text.toString()
             val password = binding.etPasswordLogin.text.toString()
 
-//            if (!validateEmail(email)) {
-//                return@setOnClickListener
-//            }
+            if (!validateEmail(email)) {
+                return@setOnClickListener
+            }
 
             if (password.isEmpty()) {
                 Toast.makeText(this, "Password harus diisi", Toast.LENGTH_SHORT).show()
@@ -60,15 +61,15 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-//        binding.etEmailLogin.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//
-//            override fun afterTextChanged(s: Editable?) {
-//                validateEmail(s.toString())
-//            }
-//        })
+        binding.etEmailLogin.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                validateEmail(s.toString())
+            }
+        })
     }
 
     private suspend fun validateToken(token: String) {
@@ -87,10 +88,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validateEmail(email: String): Boolean {
         return if (email.isEmpty()) {
-            binding.textInputEmailLogin.error = "Email tidak boleh kosong"
+            binding.textInputEmailLogin.error = "Email tidak boleh kosong!"
             false
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.textInputEmailLogin.error = "Format email tidak valid"
+            binding.textInputEmailLogin.error = "Format email tidak valid!"
             false
         } else {
             binding.textInputEmailLogin.error = null
@@ -108,12 +109,17 @@ class LoginActivity : AppCompatActivity() {
                 userPreference.saveToken(token!!)
                 userPreference.saveUserId(id!!)
                 userPreference.saveIsAdmin(role!!)
-                Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Login berhasil!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                 finish()
             } else {
-                Toast.makeText(this, "Login gagal: ${response.message()}", Toast.LENGTH_SHORT)
-                    .show()
+                val errorBody = response.errorBody()?.string()
+                val errorMessage = try {
+                    JSONObject(errorBody ?: "").optString("error", response.message())
+                } catch (e: Exception) {
+                    response.message()
+                }
+                Toast.makeText(this, "Login gagal: $errorMessage", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()

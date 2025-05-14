@@ -12,23 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--        <com.google.android.material.button.MaterialButton-->
-        <!--            android:id="@+id/btn_back_profile"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginTop="72dp"-->
-        <!--            android:background="@color/transparent"-->
-        <!--            android:fontFamily="@font/clash_grotesk_regular"-->
-        <!--            android:text="Settings"-->
-        <!--            android:textAllCaps="false"-->
-        <!--            android:textColor="@color/light_cream"-->
-        <!--            android:textSize="28sp"-->
-        <!--            app:iconTint="@color/light_cream"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-        <!--            app:icon="@drawable/ic_back_profile"-->
-
         <TextView
             android:id="@+id/btn_back_profile"
             android:layout_width="wrap_content"
@@ -69,7 +52,7 @@
                     android:id="@+id/image_avatar"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="40dp"
                     android:src="@drawable/ic_image"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -167,35 +150,15 @@
                     android:layout_height="2dp"
                     android:layout_marginTop="17dp"
                     android:background="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/btn_edit_profile"
+                    app:layout_constraintStart_toStartOf="@id/btn_edit_profile"
                     app:layout_constraintTop_toBottomOf="@id/btn_edit_profile" />
-
-                <!--                <com.google.android.material.button.MaterialButton-->
-                <!--                    android:id="@+id/btn_my_report"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="32dp"-->
-                <!--                    android:layout_marginStart="-16dp"-->
-                <!--                    app:iconSize="28dp"-->
-                <!--                    android:background="@color/transparent"-->
-                <!--                    android:fontFamily="@font/clash_grotesk_regular"-->
-                <!--                    android:text="Laporan Saya"-->
-                <!--                    android:textAllCaps="false"-->
-                <!--                    android:textColor="@color/black"-->
-                <!--                    android:textSize="16sp"-->
-                <!--                    app:icon="@drawable/ic_my_report"-->
-                <!--                    app:iconTint="@color/black"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toBottomOf="@id/divider_guest"-->
-                <!--                    tools:ignore="TextSizeCheck" />-->
-
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="45dp"
                     android:background="@color/transparent"
                     android:fontFamily="@font/clash_grotesk_regular"
                     android:text="Logout"
@@ -205,19 +168,21 @@
                     app:icon="@drawable/ic_logout"
                     app:iconSize="28dp"
                     app:iconTint="@color/black"
-                    app:layout_constraintStart_toStartOf="@id/divider_guest"
-                    app:layout_constraintTop_toBottomOf="@id/divider_guest"
+                    app:layout_constraintStart_toStartOf="@id/btn_edit_profile"
+                    app:layout_constraintTop_toBottomOf="@id/btn_edit_profile"
                     tools:ignore="TextSizeCheck" />
 
                 <ProgressBar
                     android:id="@+id/progress_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="15dp"
+                    android:indeterminate="true"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toTopOf="@id/text_name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintEnd_toEndOf="@id/divider_guest"
+                    app:layout_constraintStart_toStartOf="@id/divider_guest"
+                    app:layout_constraintTop_toTopOf="@id/divider_guest" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

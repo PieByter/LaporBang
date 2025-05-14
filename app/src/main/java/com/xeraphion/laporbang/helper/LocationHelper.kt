@@ -14,11 +14,7 @@ import com.google.android.gms.maps.GoogleMap
 
 class LocationHelper(private val context: Context, private val googleMap: GoogleMap) {
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-    init {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-    }
+    private var fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
     @SuppressLint("MissingPermission")
     fun getMyLocation(requestPermissionLauncher: ActivityResultLauncher<String>) {
@@ -26,7 +22,7 @@ class LocationHelper(private val context: Context, private val googleMap: Google
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.let {
                     googleMap.isMyLocationEnabled = true
-                } ?: Toast.makeText(context, "Location not available", Toast.LENGTH_SHORT).show()
+                } ?: Toast.makeText(context, "Lokasi anda tidak tersedia", Toast.LENGTH_SHORT).show()
             }
         } else {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)

@@ -71,20 +71,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!--            <EditText-->
-            <!--                android:id="@+id/et_email_login"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:autofillHints="@string/prompt_email"-->
-            <!--                android:backgroundTint="@color/light_cream"-->
-            <!--                android:hint="@string/prompt_email"-->
-            <!--                android:inputType="textEmailAddress"-->
-            <!--                android:minHeight="48dp"-->
-            <!--                android:selectAllOnFocus="true"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/tv_email_login" />-->
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputEmailLogin"
                 android:layout_width="0dp"
@@ -94,6 +80,7 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
+                app:errorTextColor="@color/light_cream"
                 app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -128,23 +115,6 @@
                 app:layout_constraintStart_toStartOf="@id/tv_email_login"
                 app:layout_constraintTop_toBottomOf="@id/textInputEmailLogin" />
 
-            <!--            <EditText-->
-            <!--                android:id="@+id/et_password_login"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="8dp"-->
-            <!--                android:autofillHints="@string/prompt_password"-->
-            <!--                android:backgroundTint="@color/light_cream"-->
-            <!--                android:hint="@string/prompt_password"-->
-            <!--                android:imeActionLabel="@string/action_sign_in_short"-->
-            <!--                android:imeOptions="actionDone"-->
-            <!--                android:inputType="textPassword"-->
-            <!--                android:minHeight="48dp"-->
-            <!--                android:selectAllOnFocus="true"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/tv_password_login" />-->
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputPassword"
                 android:layout_width="0dp"
@@ -154,6 +124,7 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
+                app:errorTextColor="@color/light_cream"
                 app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

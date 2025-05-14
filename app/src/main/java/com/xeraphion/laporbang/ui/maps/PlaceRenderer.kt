@@ -56,7 +56,7 @@ class PlaceRenderer(
             val canvas = Canvas(bitmap)
             vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
             vectorDrawable.draw(canvas)
-            return BitmapDescriptorFactory.fromBitmap(bitmap) // Mengembalikan BitmapDescriptor
+            return BitmapDescriptorFactory.fromBitmap(bitmap)
         }
     }
 

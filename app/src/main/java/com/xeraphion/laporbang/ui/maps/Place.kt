@@ -9,7 +9,7 @@ data class Place(
     val latLng: LatLng,
     val address: String,
     val severity: String,
-    val report: ReportsResponseItem // Reference to the original report
+    val report: ReportsResponseItem
 ) : ClusterItem {
     override fun getPosition(): LatLng = latLng
     override fun getTitle(): String = name
