@@ -1,7 +1,10 @@
 package com.xeraphion.laporbang.ui.home
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -15,7 +18,6 @@ import com.xeraphion.laporbang.R
 import com.xeraphion.laporbang.UserPreference
 import com.xeraphion.laporbang.databinding.FragmentHomeBinding
 import com.xeraphion.laporbang.response.ReportsResponseItem
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -28,12 +30,7 @@ class HomeFragment : Fragment() {
         HomeViewModelFactory(userPreference)
     }
 
-    private var isFilteredById = false
-    private var currentSort = SortType.DATE
-    private var isAscending = false
     private var latestReportList: List<ReportsResponseItem> = emptyList()
-
-    enum class SortType { DATE, SEVERITY, HOLES }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +43,25 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.rvReport.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.fetchReports()
+        if (viewModel.isFilteredById.value) {
+            viewModel.fetchReportsByUserId()
+        } else {
+            viewModel.fetchReports()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.isFilteredById.collect { /* Update UI if needed */ }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.currentSort.collect { /* Update UI if needed */ }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.isAscending.collect {
+                updateSortIcon()
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -57,10 +72,13 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Update the dataChangedEvent collection to use the filter state
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.dataChangedEvent.collect {
-                    viewModel.fetchReports()
+                    // No need to fetch reports directly here
+                    // The ViewModel's notifyDataChanged method will handle
+                    // choosing the right fetch method based on filter state
                 }
             }
         }
@@ -76,8 +94,8 @@ class HomeFragment : Fragment() {
                     true
                 }
                 R.id.action_sorted_by -> {
-                    isAscending = !isAscending
-                    updateSortIcon()
+                    // Fix: use ViewModel to update sort direction instead of local variable
+                    viewModel.setSortDirection(!viewModel.isAscending.value)
                     updateReportList()
                     true
                 }
@@ -89,7 +107,7 @@ class HomeFragment : Fragment() {
 
     private fun showFilterPopup(menuItem: MenuItem) {
         val popupMenu = PopupMenu(requireContext(), requireActivity().findViewById(R.id.action_filter))
-        popupMenu.menu.add(if (isFilteredById) "Tampilkan Semua Laporan" else "Filter berdasarkan Pengguna")
+        popupMenu.menu.add(if (viewModel.isFilteredById.value) "Tampilkan Semua Laporan" else "Filter berdasarkan Pengguna")
         popupMenu.menu.add("Urutkan berdasarkan Tanggal")
         popupMenu.menu.add("Urutkan berdasarkan Keparahan")
         popupMenu.menu.add("Urutkan berdasarkan Jumlah Lubang")
@@ -97,29 +115,24 @@ class HomeFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener { popupItem ->
             when (popupItem.title) {
                 "Filter berdasarkan Pengguna" -> {
-                    isFilteredById = true
-                    viewModel.fetchReportsByUserId()
+                    viewModel.setFilterById(true)
                 }
                 "Tampilkan Semua Laporan" -> {
-                    isFilteredById = false
-                    viewModel.fetchReports()
+                    viewModel.setFilterById(false)
                 }
                 "Urutkan berdasarkan Tanggal" -> {
-                    currentSort = SortType.DATE
-                    isAscending = true
-                    updateSortIcon()
+                    viewModel.setSortType(HomeViewModel.SortType.DATE)
+                    viewModel.setSortDirection(true)
                     updateReportList()
                 }
                 "Urutkan berdasarkan Keparahan" -> {
-                    currentSort = SortType.SEVERITY
-                    isAscending = false
-                    updateSortIcon()
+                    viewModel.setSortType(HomeViewModel.SortType.SEVERITY)
+                    viewModel.setSortDirection(false)
                     updateReportList()
                 }
                 "Urutkan berdasarkan Jumlah Lubang" -> {
-                    currentSort = SortType.HOLES
-                    isAscending = true
-                    updateSortIcon()
+                    viewModel.setSortType(HomeViewModel.SortType.HOLES)
+                    viewModel.setSortDirection(true)
                     updateReportList()
                 }
             }
@@ -129,26 +142,26 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateSortIcon() {
-        val iconRes = if (isAscending) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down
+        val iconRes = if (viewModel.isAscending.value) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down
         binding.toolbar.menu.findItem(R.id.action_sorted_by)?.icon =
             ContextCompat.getDrawable(requireContext(), iconRes)
     }
 
     private fun updateReportList() {
-        val sortedList = when (currentSort) {
-            SortType.DATE -> {
-                if (isAscending) {
+        val sortedList = when (viewModel.currentSort.value) {
+            HomeViewModel.SortType.DATE -> {
+                if (viewModel.isAscending.value) {
                     latestReportList.sortedBy { it.updatedAt ?: it.createdAt }
                 } else {
                     latestReportList.sortedByDescending { it.updatedAt ?: it.createdAt }
                 }
             }
-            SortType.SEVERITY -> {
-                if (isAscending) latestReportList.sortedBy { severityOrder(it.severity) }
+            HomeViewModel.SortType.SEVERITY -> {
+                if (viewModel.isAscending.value) latestReportList.sortedBy { severityOrder(it.severity) }
                 else latestReportList.sortedByDescending { severityOrder(it.severity) }
             }
-            SortType.HOLES -> {
-                if (isAscending) latestReportList.sortedBy { it.holesCount ?: 0 }
+            HomeViewModel.SortType.HOLES -> {
+                if (viewModel.isAscending.value) latestReportList.sortedBy { it.holesCount ?: 0 }
                 else latestReportList.sortedByDescending { it.holesCount ?: 0 }
             }
         }

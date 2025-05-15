@@ -42,7 +42,6 @@ class DetailHomeFragment : Fragment() {
     ): View {
         _binding = FragmentDetailHomeBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,7 +70,7 @@ class DetailHomeFragment : Fragment() {
                     if (currentUserId != report?.userId && !isAdmin) {
                         Toast.makeText(
                             requireContext(),
-                            "Anda tidak memiliki izin untuk memperbarui laporan ini.",
+                            "Anda tidak diizinkan mengubah laporan ini!",
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
@@ -204,7 +203,7 @@ class DetailHomeFragment : Fragment() {
                 if (response.isSuccessful) {
                     Toast.makeText(
                         requireContext(),
-                        "Laporan berhasil dihapus.",
+                        "Laporan berhasil dihapus!",
                         Toast.LENGTH_SHORT
                     ).show()
                     viewModel.notifyDataChanged()
@@ -212,7 +211,7 @@ class DetailHomeFragment : Fragment() {
                 } else if (response.code() == 403) {
                     Toast.makeText(
                         requireContext(),
-                        "Anda tidak dapat menghapus laporan ini.",
+                        "Anda tidak dapat menghapus laporan ini!",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
@@ -226,7 +225,7 @@ class DetailHomeFragment : Fragment() {
                 e.printStackTrace()
                 Toast.makeText(
                     requireContext(),
-                    "Terjadi kesalahan saat menghapus laporan.",
+                    "Terjadi kesalahan saat menghapus laporan!",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -266,7 +265,7 @@ class DetailHomeFragment : Fragment() {
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "Permission denied. Unable to access location.",
+                    "Izin ditolak, Tidak dapat mengakses lokasi!",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -286,7 +285,7 @@ class DetailHomeFragment : Fragment() {
         reportId?.let {
             fetchReportDetails(it) { updatedReport ->
                 updatedReport?.let { report ->
-                    setupMapView(report.location, null) // Update the map with the new location
+                    setupMapView(report.location, null)
                 }
             }
         }
