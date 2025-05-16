@@ -1,7 +1,6 @@
 package com.xeraphion.laporbang.yolov11.detectors
 
 import android.content.Context
-import com.xeraphion.laporbang.yolov11.ObjectDetectorHelper.Companion.MODEL_YOLO
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.vision.detector.Detection
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
@@ -12,7 +11,7 @@ class TaskVisionDetector(
     var currentModel: Int = 0,
     val context: Context,
 
-    ): com.xeraphion.laporbang.yolov11.detectors.ObjectDetector {
+    ) : com.xeraphion.laporbang.yolov11.detectors.ObjectDetector {
 
     private var objectDetector: ObjectDetector
 
@@ -23,7 +22,7 @@ class TaskVisionDetector(
 //                MODEL_YOLO -> "yolov11_float32.tflite"
 //                else -> "yolov11_float32.tflite"
 //            }
-        val modelName = "yolov11_float32.tflite"
+        val modelName = "yolov11_primer.tflite"
 
         objectDetector = ObjectDetector.createFromFileAndOptions(context, modelName, options)
 

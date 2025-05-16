@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="LaporBang.app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-05-14T15:09:44.845692700Z">
+        <DropdownSelection timestamp="2025-05-16T06:01:37.180305Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\USER\.android\avd\Medium_Phone.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=189425b3" />
             </handle>
           </Target>
         </DropdownSelection>

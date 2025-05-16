@@ -26,7 +26,7 @@ class YoloDetector(
         yolo.setIouThreshold(iouThreshold)
         yolo.setConfidenceThreshold(confidenceThreshold)
 
-        val modelPath = "yolov11_float32.tflite"
+        val modelPath = "yolov11_primer.tflite"
         val metadataPath = "pothole.yaml"
 
         val config = LocalYoloModel(

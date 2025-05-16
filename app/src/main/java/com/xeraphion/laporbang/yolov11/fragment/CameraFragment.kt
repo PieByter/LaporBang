@@ -61,7 +61,7 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
         super.onViewCreated(view, savedInstanceState)
 
         objectDetectorHelper = ObjectDetectorHelper(
-            threshold = 0.5f,
+            threshold = 0.25f,
             numThreads = 4,
             maxResults = 5,
             currentDelegate = ObjectDetectorHelper.DELEGATE_NNAPI,

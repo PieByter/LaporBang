@@ -280,7 +280,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
                 val geofence = Geofence.Builder()
                     .setRequestId(report.id.toString())
-                    .setCircularRegion(latLng.latitude, latLng.longitude, 100f)
+                    .setCircularRegion(latLng.latitude, latLng.longitude, 1000f)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                     .build()
