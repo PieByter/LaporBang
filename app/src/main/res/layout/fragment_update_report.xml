@@ -170,11 +170,12 @@
                 app:layout_constraintStart_toStartOf="@id/iv_result_image"
                 app:layout_constraintTop_toTopOf="@id/iv_result_image" />
 
-            <ProgressBar
-                android:id="@+id/progressBar_scan"
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/contentLoadingBar"
+                style="?android:attr/progressBarStyle"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_gravity="center"
+                android:indeterminateTint="@color/light_green"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/iv_result_image"
                 app:layout_constraintEnd_toEndOf="@id/iv_result_image"

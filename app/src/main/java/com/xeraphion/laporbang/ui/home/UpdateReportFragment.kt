@@ -154,7 +154,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 
         binding.btnAnalyzeUpdateReport.setOnClickListener {
             imageBitmap?.let { bitmap ->
-                binding.progressBarScan.visibility = View.VISIBLE
+                binding.contentLoadingBar.show()
                 binding.btnAnalyzeUpdateReport.isEnabled = false
                 runCombinedInference(bitmap)
             } ?: Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
@@ -499,7 +499,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                 }
                 updateUI(originalBitmap, yoloResult, maskedBitmap)
             } finally {
-                binding.progressBarScan.visibility = View.GONE
+                binding.contentLoadingBar.hide()
                 binding.btnAnalyzeUpdateReport.isEnabled = true
             }
         }

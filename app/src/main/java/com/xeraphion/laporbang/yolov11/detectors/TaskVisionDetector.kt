@@ -7,7 +7,7 @@ import org.tensorflow.lite.task.vision.detector.ObjectDetector
 import java.util.LinkedList
 
 class TaskVisionDetector(
-    var options: ObjectDetector.ObjectDetectorOptions,
+    options: ObjectDetector.ObjectDetectorOptions,
     var currentModel: Int = 0,
     val context: Context,
 
