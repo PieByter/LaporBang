@@ -56,6 +56,8 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.channels.FileChannel
+import kotlin.apply
+import kotlin.text.category
 
 class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 
@@ -463,6 +465,15 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         val resultBitmap = maskedBitmap ?: originalBitmap
         binding.ivResultImage.setImageBitmap(resultBitmap)
 
+        // Process detections to ensure measurements are calculated and displayed
+        if (!detections.isNullOrEmpty()) {
+            processDetections(detections, originalBitmap)
+        } else {
+            binding.tvDiameterReport.setText("0.0")
+            binding.tvDepthReport.setText("0.0")
+            Toast.makeText(requireContext(), "No detections", Toast.LENGTH_SHORT).show()
+        }
+
         val holesCount = detections?.size ?: 0
         binding.tvHolesCountReport.setText(holesCount.toString())
 
@@ -594,31 +605,124 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         return null
     }
 
+//    fun processDetections(
+//        detections: List<ObjectDetection>,
+//        bitmap: Bitmap,
+//        realLaneWidthCm: Float = 300f,
+//    ) {
+//        val laneWidthPixels = getLaneWidthPixels(bitmap)
+//        if (laneWidthPixels == null) {
+//            binding.tvDiameterReport.text = Editable.Factory.getInstance().newEditable("Lane width not detected")
+//            return
+//        }
+//
+//        val pixelsPerCm = laneWidthPixels / realLaneWidthCm
+//
+//        detections.forEach { detection ->
+//            if (detection.category.label == "pothole") {
+//                val bbox = detection.boundingBox
+//                val diameterPixels = bbox.right - bbox.left
+//                val diameterCm = diameterPixels / pixelsPerCm
+//
+//                // Update UI with the calculated diameter
+//                binding.tvDiameterReport.text = Editable.Factory.getInstance().newEditable("%.2f cm".format(diameterCm))
+//            }
+//        }
+//    }
+
     fun processDetections(
         detections: List<ObjectDetection>,
-        bitmap: Bitmap,
-        realLaneWidthCm: Float = 300f,
+        bitmap: Bitmap
     ) {
-        val laneWidthPixels = getLaneWidthPixels(bitmap)
-        if (laneWidthPixels == null) {
-            binding.tvDiameterReport.text = Editable.Factory.getInstance().newEditable("Lane width not detected")
-            return
+        detections.forEachIndexed { index, detection ->
+            android.util.Log.d("DebugBBox", "Index: $index, Label: ${detection.category.label}, BBox: ${detection.boundingBox}")
         }
 
-        val pixelsPerCm = laneWidthPixels / realLaneWidthCm
+        val prefs = requireContext().getSharedPreferences("CalibrationPrefs", Context.MODE_PRIVATE)
+        val pixelsPerCm = prefs.getFloat("pixels_per_cm", 5f)
 
-        detections.forEach { detection ->
-            if (detection.category.label == "pothole") {
+        var totalDiameterMm = 0f
+        var maxDiameterMm = 0f
+        var detectedPotholes = 0
+        val measurementMap = mutableMapOf<Int, String>()
+        val allDiameters = mutableListOf<Float>()
+
+        android.util.Log.d("DiameterCalc", "=== Processing ${detections.size} detections ===")
+
+        detections.forEachIndexed { index, detection ->
+            android.util.Log.d("ProcessLabel", "Processing label: ${detection.category.label}")
+
+            if (detection.category.label.contains("pothole", ignoreCase = true)
+                || detection.category.label.contains("lubang", ignoreCase = true)
+                || detection.category.label == "0"
+                || detection.category.label == "Lubang") {
+
                 val bbox = detection.boundingBox
-                val diameterPixels = bbox.right - bbox.left
-                val diameterCm = diameterPixels / pixelsPerCm
+                val widthPixels = bbox.width()
+                val heightPixels = bbox.height()
+                val diameterPixels = (widthPixels + heightPixels) / 2
+                val diameterMm = (diameterPixels / pixelsPerCm) * 10
 
-                // Update UI with the calculated diameter
-                binding.tvDiameterReport.text = Editable.Factory.getInstance().newEditable("%.2f cm".format(diameterCm))
+                android.util.Log.d("DiameterCalc", "Detection $index: width=$widthPixels, height=$heightPixels, diameterPx=$diameterPixels, diameterMm=$diameterMm")
+
+                // Track maximum diameter
+                if (diameterMm > maxDiameterMm) {
+                    maxDiameterMm = diameterMm
+                }
+
+                totalDiameterMm += diameterMm
+                allDiameters.add(diameterMm)
+                detectedPotholes++
+                measurementMap[index] = "Ø ${String.format("%.1f", diameterMm)} mm"
+
+                android.util.Log.d("DiameterCalc", "POTHOLE #$detectedPotholes: diameter=${diameterMm}mm")
             }
         }
-    }
 
+        activity?.runOnUiThread {
+            if (detectedPotholes > 0) {
+                val avgDiameterMm = totalDiameterMm / detectedPotholes
+
+                // Use maximum diameter instead of average
+                val reportDiameterMm = maxDiameterMm
+                val diameterText = String.format("%.1f", reportDiameterMm)
+                val depthText = String.format("%.1f", reportDiameterMm / 10)
+
+                // Update EditText fields with max diameter
+                binding.tvDiameterReport.setText(diameterText)
+                binding.tvDepthReport.setText(depthText)
+
+                binding.ivResultImage.post {
+                    val tfliteResults = detections.map { detection ->
+                        Detection.create(
+                            detection.boundingBox,
+                            listOf(Category.create(detection.category.label, null, detection.category.confidence))
+                        )
+                    }
+
+                    binding.staticOverlayView.setResultsWithMeasurements(
+                        tfliteResults,
+                        binding.ivResultImage.width,
+                        binding.ivResultImage.height,
+                        measurementMap
+                    )
+
+                    android.util.Log.d("DiameterCalc", "Updated overlay with ${measurementMap.size} measurements")
+                }
+
+                Toast.makeText(
+                    requireContext(),
+                    "Max Diameter: $diameterText mm (dari $detectedPotholes lubang)",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                binding.tvDiameterReport.setText("0.0")
+                binding.tvDepthReport.setText("0.0")
+                Toast.makeText(requireContext(), "Tidak ada lubang terdeteksi", Toast.LENGTH_LONG).show()
+            }
+            updateSeverityTextView()
+        }
+    }
 
     override fun onResume() {
         super.onResume()

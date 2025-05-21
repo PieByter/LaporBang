@@ -7,8 +7,14 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import org.tensorflow.lite.task.vision.detector.Detection
+import kotlin.collections.get
+import kotlin.collections.plusAssign
+import kotlin.times
 
 class StaticOverlayView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
+    private var detectionMeasurements: Map<Int, String> = emptyMap() // To store diameter info
+
+
     private val boxPaint = Paint().apply {
         color = Color.CYAN
         style = Paint.Style.STROKE
@@ -17,7 +23,7 @@ class StaticOverlayView(context: Context, attrs: AttributeSet?) : View(context, 
 
     private val textPaint = Paint().apply {
         color = Color.CYAN
-        textSize = 16.0f
+        textSize = 20.0f
         style = Paint.Style.FILL
     }
 
@@ -35,6 +41,19 @@ class StaticOverlayView(context: Context, attrs: AttributeSet?) : View(context, 
         results = detectionResults
         frameWidth = width
         frameHeight = height
+        invalidate()
+    }
+
+    fun setResultsWithMeasurements(
+        detectionResults: List<Detection>,
+        width: Int,
+        height: Int,
+        measurements: Map<Int, String>
+    ) {
+        results = detectionResults
+        frameWidth = width
+        frameHeight = height
+        detectionMeasurements = measurements
         invalidate()
     }
 
@@ -64,29 +83,40 @@ class StaticOverlayView(context: Context, attrs: AttributeSet?) : View(context, 
         val verticalOffset = 240f
         val horizontalOffset = 120f
 
-        for (result in results) {
+        for ((index, result) in results.withIndex()) {
             val boundingBox = result.boundingBox
 
             val left = boundingBox.left * scaleX * 1.45F + dx
-            val top = boundingBox.top * scaleY * 1.45F+ dy
-            val right = boundingBox.right * scaleX * 1.45F+ dx
-            val bottom = boundingBox.bottom * scaleY * 1.6F+ dy
+            val top = boundingBox.top * scaleY * 1.45F + dy
+            val right = boundingBox.right * scaleX * 1.45F + dx
+            val bottom = boundingBox.bottom * scaleY * 1.6F + dy
 
             canvas.drawRect(left, top, right, bottom, boxPaint)
 
-            val label = "${result.categories[0].label} ${"%.2f".format(result.categories[0].score)}"
-            val textWidth = textPaint.measureText(label)
-            val textHeight = textPaint.textSize
+            // Get label with confidence + diameter measurement if available
+            val confidenceText = "${result.categories[0].label} ${"%.2f".format(result.categories[0].score)}"
+            val measurementText = detectionMeasurements[index] ?: ""
+            val label = if (measurementText.isNotEmpty())
+                "$confidenceText\n$measurementText"
+            else
+                confidenceText
 
-            canvas.drawRect(
-                left,
-                top,
-                left + textWidth + 8,
-                top - textHeight - 8,
-                textBgPaint
-            )
+            // Draw text with measurement
+            val lines = label.split("\n")
+            var yPos = top - 4
 
-            canvas.drawText(label, left + 4, top - 4, textPaint)
+            for (line in lines) {
+                val textWidth = textPaint.measureText(line)
+                canvas.drawRect(
+                    left,
+                    yPos - textPaint.textSize,
+                    left + textWidth + 8,
+                    yPos + 4,
+                    textBgPaint
+                )
+                canvas.drawText(line, left + 4, yPos, textPaint)
+                yPos += textPaint.textSize + 4
+            }
         }
     }
 }
