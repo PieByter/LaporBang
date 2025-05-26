@@ -417,18 +417,27 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         }
     }
 
-    private fun classifySeverity(diameterMm: Float, areaPercentage: Float): String {
+    private fun classifySeverity(diameterCm: Float, areaPercentage: Float): String {
+        Log.d("SeverityClassifier", "Diameter: $diameterCm cm, Area: $areaPercentage%")
         val areaCategory = when {
             areaPercentage < 10.0f -> 1
             areaPercentage < 25.0f -> 2
             else -> 3
         }
+
         val diameterCategory = when {
-            diameterMm < 200.0f -> 1
-            diameterMm < 450.0f -> 2
-            diameterMm <= 750.0f -> 3
+            diameterCm < 20.0f -> 1
+            diameterCm < 45.0f -> 2
+            diameterCm <= 75.0f -> 3
             else -> 3
         }
+
+        Log.d(
+            "SeverityClassifier",
+            "Area Category: $areaCategory, Diameter Category: $diameterCategory"
+        )
+
+
         return when {
             areaCategory == 1 && diameterCategory == 1 -> "Rendah"
             areaCategory == 1 && diameterCategory == 2 -> "Rendah"
@@ -444,7 +453,8 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
     }
 
     private fun updateSeverityTextView() {
-        val diameter = binding.tvDiameterReport.text.toString().toFloatOrNull() ?: 0f
+        val diameterStr = binding.tvDiameterReport.text.toString().replace(",", ".")
+        val diameter = diameterStr.toFloatOrNull() ?: 0f
         val areaPercentage = segmentationPercentageValue ?: 0f
 
         if (segmentationPercentageValue != null) {
@@ -582,75 +592,186 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         }
     }
 
+//    private fun updateUI(
+//        originalBitmap: Bitmap,
+//        detections: List<ObjectDetection>?,
+//        maskedBitmap: Bitmap?,
+//    ) {
+//        val resultBitmap = maskedBitmap ?: originalBitmap
+//        binding.ivResultImage.setImageBitmap(resultBitmap)
+//
+//        // Process detections to ensure measurements are calculated and displayed
+//        if (!detections.isNullOrEmpty()) {
+//            processDetections(detections, originalBitmap)
+//        } else {
+//            binding.tvDiameterReport.setText("0.0")
+//            Toast.makeText(requireContext(), "Tidak terdeteksi lubang jalan", Toast.LENGTH_SHORT)
+//                .show()
+//        }
+//
+//        val holesCount = detections?.size ?: 0
+//        binding.tvHolesCountReport.setText(holesCount.toString())
+//
+//        lastProcessedBitmap = resultBitmap
+//        saveBitmapToFile(requireContext(), resultBitmap, "result.jpg")
+//
+//        // Convert ObjectDetection to Detection for StaticOverlayView
+//        val tfliteResults = detections?.map {
+//            Detection.create(
+//                it.boundingBox,
+//                listOf(
+//                    Category.create(
+//                        it.category.label,
+//                        null,
+//                        it.category.confidence
+//                    )
+//                )
+//            )
+//        } ?: emptyList()
+//
+//        val baseBitmap = maskedBitmap ?: originalBitmap
+//
+////
+////        lastProcessedBitmap = drawDetectionsOnBitmap(
+////            baseBitmap,
+////            tfliteResults,
+////            originalBitmap.width,
+////            originalBitmap.height
+////        )
+//
+//        lastProcessedBitmap?.let {
+//            binding.ivResultImage.setImageBitmap(it)
+//            saveBitmapToFile(requireContext(), it, "overlay_result.jpg")
+//        }
+//
+//        binding.ivResultImage.post {
+//            val overlayWidth = binding.ivResultImage.width
+//            val overlayHeight = binding.ivResultImage.height
+//            binding.staticOverlayView.setResults(tfliteResults, overlayWidth, overlayHeight)
+//        }
+//
+//        showToast("Lubang jalan terdeteksi : ${detections?.size ?: 0}")
+//
+//        updateSeverityTextView()
+//    }
+//
+//    private fun showToast(message: String) {
+//        activity?.runOnUiThread {
+//            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+//        }
+//    }
+
     private fun updateUI(
         originalBitmap: Bitmap,
         detections: List<ObjectDetection>?,
         maskedBitmap: Bitmap?,
     ) {
+        // Use masked bitmap if available, otherwise use original
         val resultBitmap = maskedBitmap ?: originalBitmap
-        binding.ivResultImage.setImageBitmap(resultBitmap)
+        binding.contentLoadingBar.show()
 
-        // Process detections to ensure measurements are calculated and displayed
+        // Process measurements and calculate values from detections
+        val measurementMap = mutableMapOf<Int, String>()
+        var maxDiameterCm = 0f
+        var detectedPotholes = 0
+
         if (!detections.isNullOrEmpty()) {
-            processDetections(detections, originalBitmap)
+            // Calculate calibration for measurements
+            val prefs = requireContext().getSharedPreferences("CalibrationPrefs", Context.MODE_PRIVATE)
+            val basePixelsPerCm = prefs.getFloat("pixels_per_cm", 36.72f)
+            val calibrationReferenceSize = 3120f
+            val originalWidth = originalBitmap.width.toFloat()
+            val originalHeight = originalBitmap.height.toFloat()
+            val yoloInputSize = 640f
+            val scaleX = originalWidth / yoloInputSize
+            val scaleY = originalHeight / yoloInputSize
+            val imageToCalibrationRatio =
+                kotlin.math.max(originalWidth, originalHeight) / calibrationReferenceSize
+            val currentImagePixelsPerCm = basePixelsPerCm * imageToCalibrationRatio
+            val yoloPixelsPerCm = currentImagePixelsPerCm / kotlin.math.max(scaleX, scaleY)
+
+            // Process each detection to get measurements
+            detections.forEachIndexed { index, detection ->
+                if (detection.category.label.contains("pothole", ignoreCase = true) ||
+                    detection.category.label.contains("lubang", ignoreCase = true) ||
+                    detection.category.label == "0" ||
+                    detection.category.label == "Lubang"
+                ) {
+                    val bbox = detection.boundingBox
+
+                    // Calculate dimensions in cm
+                    val widthPixelsYolo = bbox.width()
+                    val heightPixelsYolo = bbox.height()
+                    val widthCm = widthPixelsYolo / yoloPixelsPerCm
+                    val heightCm = heightPixelsYolo / yoloPixelsPerCm
+
+                    // Calculate diagonal for diameter
+                    val diagonalPixelsYolo = kotlin.math.sqrt(
+                        (widthPixelsYolo * widthPixelsYolo + heightPixelsYolo * heightPixelsYolo).toDouble()
+                    ).toFloat()
+                    val diagonalCm = diagonalPixelsYolo / yoloPixelsPerCm
+
+                    if (diagonalCm > maxDiameterCm) {
+                        maxDiameterCm = diagonalCm
+                    }
+
+                    detectedPotholes++
+                    measurementMap[index] =
+                        "Ø (W: ${String.format("%.2f", widthCm)} × H: ${String.format("%.2f", heightCm)})"
+                }
+            }
+
+            // Update UI with detected values
+            if (detectedPotholes > 0) {
+                val diameterText = String.format("%.2f", maxDiameterCm)
+                binding.tvDiameterReport.setText(diameterText)
+                binding.tvHolesCountReport.setText(detectedPotholes.toString())
+            } else {
+                binding.tvDiameterReport.setText("0.0")
+                binding.tvHolesCountReport.setText("0")
+            }
         } else {
             binding.tvDiameterReport.setText("0.0")
+            binding.tvHolesCountReport.setText("0")
             Toast.makeText(requireContext(), "Tidak terdeteksi lubang jalan", Toast.LENGTH_SHORT)
                 .show()
         }
 
-        val holesCount = detections?.size ?: 0
-        binding.tvHolesCountReport.setText(holesCount.toString())
-
-        lastProcessedBitmap = resultBitmap
-        saveBitmapToFile(requireContext(), resultBitmap, "result.jpg")
-
-        // Convert ObjectDetection to Detection for StaticOverlayView
-        val tfliteResults = detections?.map {
+        // Rest of the method remains the same...
+        val tfliteResults = detections?.map { detection ->
             Detection.create(
-                it.boundingBox,
+                detection.boundingBox,
                 listOf(
                     Category.create(
-                        it.category.label,
+                        detection.category.label,
                         null,
-                        it.category.confidence
+                        detection.category.confidence
                     )
                 )
             )
         } ?: emptyList()
 
-        val baseBitmap = maskedBitmap ?: originalBitmap
-
-//
-//        lastProcessedBitmap = drawDetectionsOnBitmap(
-//            baseBitmap,
-//            tfliteResults,
-//            originalBitmap.width,
-//            originalBitmap.height
-//        )
-
-        lastProcessedBitmap?.let {
-            binding.ivResultImage.setImageBitmap(it)
-            saveBitmapToFile(requireContext(), it, "overlay_result.jpg")
+        val annotatedBitmap = if (tfliteResults.isNotEmpty()) {
+            drawDetectionsOnBitmap(resultBitmap, tfliteResults, measurementMap)
+        } else {
+            resultBitmap
         }
 
-        binding.ivResultImage.post {
-            val overlayWidth = binding.ivResultImage.width
-            val overlayHeight = binding.ivResultImage.height
-            binding.staticOverlayView.setResults(tfliteResults, overlayWidth, overlayHeight)
-        }
+        lastProcessedBitmap = annotatedBitmap
+        saveBitmapToFile(requireContext(), annotatedBitmap, "result.jpg")
+        binding.ivResultImage.setImageBitmap(annotatedBitmap)
+        binding.staticOverlayView.setResults(emptyList(), 0, 0)
 
-        showToast("Lubang jalan terdeteksi : ${detections?.size ?: 0}")
+        Toast.makeText(
+            requireContext(),
+            "Lubang jalan terdeteksi: $detectedPotholes",
+            Toast.LENGTH_SHORT
+        ).show()
 
         updateSeverityTextView()
+        binding.contentLoadingBar.hide()
+        binding.btnAnalyzeReport.isEnabled = true
     }
-
-    private fun showToast(message: String) {
-        activity?.runOnUiThread {
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-        }
-    }
-
 
     fun saveBitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File {
         val file = File(context.cacheDir, fileName)
@@ -784,13 +905,22 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
     private fun drawDetectionsOnBitmap(
         bitmap: Bitmap,
         detections: List<Detection>,
-        measurements: Map<Int, String> = emptyMap()
+        measurements: Map<Int, String> = emptyMap(),
     ): Bitmap {
         // Create a mutable copy of the bitmap to draw on
         val resultBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(resultBitmap)
 
-        // Define paint objects similar to StaticOverlayView
+        // Calculate scaling factors similar to StaticOverlayView
+        val imageWidth = bitmap.width.toFloat()
+        val imageHeight = bitmap.height.toFloat()
+        val yoloInputSize = 640f
+
+        // Scale factors to match from ML model space to image space
+        val scaleX = imageWidth / yoloInputSize
+        val scaleY = imageHeight / yoloInputSize
+
+        // Define paint objects
         val boxPaint = Paint().apply {
             color = Color.CYAN
             style = Paint.Style.STROKE
@@ -809,15 +939,22 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
             alpha = 128
         }
 
-        // Draw each detection on the bitmap
+        // Draw each detection on the bitmap with proper scaling
         for ((index, result) in detections.withIndex()) {
             val boundingBox = result.boundingBox
 
-            // Draw the bounding box
-            canvas.drawRect(boundingBox, boxPaint)
+            // Apply the same scaling factors as in StaticOverlayView
+            val left = boundingBox.left * scaleX
+            val top = boundingBox.top * scaleY * 1.3f
+            val right = boundingBox.right * scaleX
+            val bottom = boundingBox.bottom * scaleY * 1.3f
+
+            // Draw the bounding box with scaled coordinates
+            canvas.drawRect(left, top, right, bottom, boxPaint)
 
             // Prepare the text
-            val confidenceText = "${result.categories[0].label} ${"%.2f".format(result.categories[0].score)}"
+            val confidenceText =
+                "${result.categories[0].label} ${"%.2f".format(result.categories[0].score)}"
             val measurementText = measurements[index] ?: ""
             val label = if (measurementText.isNotEmpty())
                 "$confidenceText\n$measurementText"
@@ -826,24 +963,25 @@ class ReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 
             // Draw text with measurement
             val lines = label.split("\n")
-            var yPos = boundingBox.top - 8
+            var yPos = top - 8
 
             for (line in lines) {
                 val textWidth = textPaint.measureText(line)
                 canvas.drawRect(
-                    boundingBox.left,
+                    left,
                     yPos - textPaint.textSize,
-                    boundingBox.left + textWidth + 8,
+                    left + textWidth + 8,
                     yPos + 4,
                     textBgPaint
                 )
-                canvas.drawText(line, boundingBox.left + 4, yPos, textPaint)
+                canvas.drawText(line, left + 4, yPos, textPaint)
                 yPos += textPaint.textSize + 4
             }
         }
 
         return resultBitmap
     }
+
     override fun onResume() {
         super.onResume()
         binding.mapViewReport.onResume()

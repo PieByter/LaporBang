@@ -8,6 +8,7 @@
     <dist:module dist:instant="true" />
 
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -62,7 +63,11 @@
 
         <activity
             android:name=".SplashScreenActivity"
-            android:exported="true" >
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
 
@@ -85,13 +90,12 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"
             android:clearTaskOnLaunch="true"
-            android:rotationAnimation="seamless"
-            android:resizeableActivity="true"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
-            tools:targetApi="O">
-        </activity>
+            android:exported="true"
+            android:resizeableActivity="true"
+            android:rotationAnimation="seamless"
+            tools:targetApi="O"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
