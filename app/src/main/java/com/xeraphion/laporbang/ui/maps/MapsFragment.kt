@@ -45,6 +45,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var geofencingClient: GeofencingClient
     private lateinit var userPreference: UserPreference
     private lateinit var clusterManager: ClusterManager<Place>
+    private var locationPermissionGranted = false
 
     private val geofencePendingIntent by lazy {
         val intent = Intent(requireContext(), GeofenceBroadcastReceiver::class.java)
@@ -70,25 +71,27 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 //            }
 //        }
 
-    private val requestNotificationPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                Toast.makeText(
-                    requireContext(),
-                    "Notifications permission granted",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Notifications permission rejected",
-                    Toast.LENGTH_SHORT
-                ).show()
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private val requestPermissionsLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val notifGranted = permissions[Manifest.permission.POST_NOTIFICATIONS] == true
+            val locationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true
+
+            if (notifGranted) {
+                Toast.makeText(requireContext(), "\n" +
+                        "Izin pemberitahuan diberikan!", Toast.LENGTH_SHORT).show()
+            }
+            if (locationGranted) {
+                locationPermissionGranted = true
+                // Only call getMyLocation if googleMap is initialized
+                if (::googleMap.isInitialized) {
+                    getMyLocation()
+                }
+            }
+            if (!notifGranted || !locationGranted) {
+                Toast.makeText(requireContext(), "Beberapa izin ditolak!", Toast.LENGTH_SHORT).show()
             }
         }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,18 +100,34 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     ): View {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
         return binding.root
-
-        if (Build.VERSION.SDK_INT >= 33) {
-            requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
-
-
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         userPreference = UserPreference.getInstance(requireContext())
+
+        // Create a list to hold permissions we need to request
+        val permissionsToRequest = mutableListOf<String>()
+
+        // Check if location permission is already granted
+        if (!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        } else {
+            locationPermissionGranted = true
+        }
+
+        // Only request notification permission if it's not already granted
+        if (Build.VERSION.SDK_INT >= 33 &&
+            !checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
+            permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+
+        // Only launch permission request if we have permissions to request
+        if (permissionsToRequest.isNotEmpty()) {
+            requestPermissionsLauncher.launch(permissionsToRequest.toTypedArray())
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             val token = userPreference.getToken()
@@ -122,7 +141,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             mapFragment.getMapAsync(this@MapsFragment)
 
             mapsViewModel.reports.observe(viewLifecycleOwner) { reports ->
-                addClusterItems(reports)
+                if (checkForegroundAndBackgroundLocationPermission()) {
+                    addClusterItems(reports)
+                }
             }
 
             mapsViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
@@ -130,10 +151,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 }
             }
-
             mapsViewModel.fetchReports()
-
-
         }
     }
 
@@ -180,7 +198,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             isMapToolbarEnabled = true
         }
 
-        getMyLocation()
+        if (locationPermissionGranted) {
+            getMyLocation()
+        }
         geofencingClient = LocationServices.getGeofencingClient(requireContext())
     }
 
