@@ -85,8 +85,8 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         val mNotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val mBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setContentTitle("Anda berada di area berlubang.")
-            .setContentText("Hati-hati, Anda mendekati lubang.")
+            .setContentTitle("Anda berada di area berlubang !")
+            .setContentText("Hati-hati, Anda mendekati lubang !")
             .setSmallIcon(R.drawable.ic_notification)
 //            .setContentTitle(geofenceTransitionDetails)
         val channel =

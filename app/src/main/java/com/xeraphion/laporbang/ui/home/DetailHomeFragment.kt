@@ -1,6 +1,7 @@
 package com.xeraphion.laporbang.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -127,10 +128,10 @@ class DetailHomeFragment : Fragment() {
         binding.tvDetailCoordinates.text =
             "Koordinat : ${report.location?.lat}, ${report.location?.lng}"
         binding.tvDetailSeverity.text = "Tingkat Keparahan : ${report.severity}"
-        binding.tvDetailSegmentationPercentage.text = "Persentase Segmentasi : ${String.format("%.2f", report.segmentationPercentage ?: 0.0)}%"
+        binding.tvDetailSegmentationPercentage.text = "Persentase Segmentasi : ${String.format("%.2f", report.segmentationPercentage ?: 0.0).replace(",", ".")}%"
         binding.tvHolesCount.text = "Jumlah Lubang : ${report.holesCount} lubang"
-        binding.tvDetailDiameter.text = "Diameter Lubang : ${report.diameter} mm"
-        binding.tvDetailDepth.text = "Kedalaman Lubang : ${report.depth} mm"
+        binding.tvDetailDiameter.text = "Diameter Lubang : ${report.diameter} cm"
+        binding.tvDetailDepth.text = "Kedalaman Lubang : ${report.depth} cm"
 
         val isUpdated = !report.updatedAt.isNullOrEmpty() && report.updatedAt != report.createdAt
         binding.tvDetailTimes.text = if (isUpdated) {

@@ -103,6 +103,21 @@
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
+                android:id="@+id/notes_report"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Catatan : Foto dari jarak 1 meter diatas permukaan tanah tepat diatas lubang jalan untuk mendapatkan pengukuran yang lebih akurat  !"
+                android:textColor="@color/light_cream"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:justificationMode="inter_character"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_gallery_report" />
+
+            <TextView
                 android:id="@+id/tv_input_image_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,7 +129,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/iv_show_image"
-                app:layout_constraintTop_toBottomOf="@id/btn_gallery_report" />
+                app:layout_constraintTop_toBottomOf="@id/notes_report" />
 
             <ImageView
                 android:id="@+id/iv_show_image"
@@ -174,8 +189,8 @@
                 style="?android:attr/progressBarStyle"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:visibility="gone"
                 android:indeterminateTint="@color/light_green"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/iv_result_image"
                 app:layout_constraintEnd_toEndOf="@id/iv_result_image"
                 app:layout_constraintStart_toStartOf="@id/iv_result_image"
@@ -264,7 +279,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
-                android:hint="Diameter Lubang (mm)"
+                android:hint="Diameter Lubang (cm)"
                 android:textColorHint="@color/light_cream"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
@@ -296,7 +311,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
-                android:hint="Kedalaman Lubang (mm)"
+                android:hint="Kedalaman Lubang (cm)"
                 android:textColorHint="@color/light_cream"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"

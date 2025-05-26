@@ -2,7 +2,6 @@ package com.xeraphion.laporbang.ui.report
 
 import com.xeraphion.laporbang.api.ApiService
 import com.xeraphion.laporbang.response.CreateResponse
-import com.xeraphion.laporbang.response.Report
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response

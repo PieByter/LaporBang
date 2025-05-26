@@ -131,7 +131,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                     selectedImageFile = imageFile
                 } ?: Toast.makeText(
                     requireContext(),
-                    "TIdak ada gambar yang dipilih",
+                    "TIdak ada gambar yang dipilih!",
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -157,7 +157,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                 binding.contentLoadingBar.show()
                 binding.btnAnalyzeUpdateReport.isEnabled = false
                 runCombinedInference(bitmap)
-            } ?: Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
+            } ?: Toast.makeText(requireContext(), "Tidak ada gambar yang dipilih!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -322,14 +322,14 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
                     })
                     Toast.makeText(
                         requireContext(),
-                        "Laporan berhasil diperbarui",
+                        "Laporan berhasil diperbarui!",
                         Toast.LENGTH_SHORT
                     ).show()
                     findNavController().popBackStack()
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Gagal memperbarui laporan: ${response.message()}",
+                        "Gagal memperbarui laporan!: ${response.message()}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -363,50 +363,81 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
         }
     }
 
-//    private fun classifySeverity(diameter: Float, depth: Float): String {
-//        val row = when {
-//            depth < 25 -> 1
-//            depth in 25.0..49.9 -> 2
-//            else -> 3
-//        }
-//
-//        val col = when {
-//            diameter < 200 -> 1
-//            diameter in 200.0..449.9 -> 2
-//            else -> 3
-//        }
-//
-//        val matrix = mapOf(
-//            "1,1" to "Rendah", "1,2" to "Rendah", "1,3" to "Sedang",
-//            "2,1" to "Rendah", "2,2" to "Sedang", "2,3" to "Tinggi",
-//            "3,1" to "Sedang", "3,2" to "Sedang", "3,3" to "Tinggi"
-//        )
-//
-//        return matrix["$row,$col"] ?: "Tidak diketahui"
-//    }
+    private fun classifySeverity(diameterMm: Float, areaPercentage: Float): String {
+        val areaCategory = when {
+            areaPercentage < 10.0f -> 1
+            areaPercentage < 25.0f -> 2
+            else -> 3
+        }
+        val diameterCategory = when {
+            diameterMm < 200.0f -> 1
+            diameterMm < 450.0f -> 2
+            diameterMm <= 750.0f -> 3
+            else -> 3
+        }
+        return when {
+            areaCategory == 1 && diameterCategory == 1 -> "Rendah"
+            areaCategory == 1 && diameterCategory == 2 -> "Rendah"
+            areaCategory == 1 && diameterCategory == 3 -> "Sedang"
+            areaCategory == 2 && diameterCategory == 1 -> "Rendah"
+            areaCategory == 2 && diameterCategory == 2 -> "Sedang"
+            areaCategory == 2 && diameterCategory == 3 -> "Tinggi"
+            areaCategory == 3 && diameterCategory == 1 -> "Sedang"
+            areaCategory == 3 && diameterCategory == 2 -> "Tinggi"
+            areaCategory == 3 && diameterCategory == 3 -> "Tinggi"
+            else -> "Tidak diketahui"
+        }
+    }
 
     private fun updateSeverityTextView() {
-//        val diameter = binding.tvDiameterUpdateReport.text.toString().toFloatOrNull() ?: 0f
-//        val depth = binding.tvDepthUpdateReport.text.toString().toFloatOrNull() ?: 0f
-//        val severity = classifySeverity(diameter, depth)
-//        binding.tvSeverityUpdateReport.text = "Tingkat Keparahan\n$severity"
+        val diameter = binding.tvDiameterUpdateReport.text.toString().toFloatOrNull() ?: 0f
+        val areaPercentage = segmentationPercentageValue ?: 0f
 
-        imageBitmap?.let { bitmap ->
+        if (segmentationPercentageValue != null) {
+            val severity = classifySeverity(diameter, areaPercentage)
+            binding.tvSeverityUpdateReport.text = "Tingkat Keparahan: $severity"
+            binding.tvSegmentationPercentageUpdateReport.text =
+                "Persentase Segmentasi: ${String.format("%.2f", areaPercentage).replace(".", ",")}%"
+        } else if (imageBitmap != null) {
             lifecycleScope.launch(Dispatchers.Default) {
-                val maskOutput = unetHelper.runInference(bitmap)
-                val (severity, percent) = unetHelper.classifySeverityByMask(maskOutput)
+                val maskOutput = unetHelper.runInference(imageBitmap!!)
+                val percent = unetHelper.percentageSegmentation(maskOutput)
+
                 withContext(Dispatchers.Main) {
                     segmentationPercentageValue = percent.toFloat()
+                    val severity = classifySeverity(diameter, percent.toFloat())
                     binding.tvSeverityUpdateReport.text = "Tingkat Keparahan: $severity"
-                    binding.tvSegmentationPercentageUpdateReport.text = "Persentase Segmentasi: %.2f%%".format(percent)
+                    binding.tvSegmentationPercentageUpdateReport.text =
+                        "Persentase Segmentasi: ${String.format("%.2f", percent).replace(".", ",")}%"
                 }
             }
-        } ?: run {
+        } else {
             segmentationPercentageValue = null
             binding.tvSeverityUpdateReport.text = "Tingkat Keparahan: -"
             binding.tvSegmentationPercentageUpdateReport.text = "Persentase Segmentasi: -"
         }
     }
+
+////        val depth = binding.tvDepthUpdateReport.text.toString().toFloatOrNull() ?: 0f
+////        val severity = classifySeverity(diameter, depth)
+////        binding.tvSeverityUpdateReport.text = "Tingkat Keparahan\n$severity"
+//
+//        imageBitmap?.let { bitmap ->
+//            lifecycleScope.launch(Dispatchers.Default) {
+//                val maskOutput = unetHelper.runInference(bitmap)
+//                val (severity, percent) = unetHelper.classifySeverityByMask(maskOutput)
+//                withContext(Dispatchers.Main) {
+//                    segmentationPercentageValue = percent.toFloat()
+//                    binding.tvSeverityUpdateReport.text = "Tingkat Keparahan: $severity"
+//                    binding.tvSegmentationPercentageUpdateReport.text = "Persentase Segmentasi: %.2f%%".format(percent)
+//                }
+//            }
+//        } ?: run {
+//            segmentationPercentageValue = null
+//            binding.tvSeverityUpdateReport.text = "Tingkat Keparahan: -"
+//            binding.tvSegmentationPercentageUpdateReport.text = "Persentase Segmentasi: -"
+//        }
+//    }
 
     private val requestLocationPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -467,12 +498,14 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 
             binding.staticOverlayView.setResults(tfliteResults, overlayWidth, overlayHeight)
         }
+
+        processDetections(results, imageBitmap!!)
     }
 
     private fun loadUnetModel(): Interpreter {
         return try {
             val assetManager = requireContext().assets
-            val fd = assetManager.openFd("unet_primer.tflite")
+            val fd = assetManager.openFd("unet_train.tflite")
             val inputStream = FileInputStream(fd.fileDescriptor)
             val channel = inputStream.channel
             val startOffset = fd.startOffset
@@ -526,7 +559,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
     private fun updateUI(
         originalBitmap: Bitmap,
         detections: List<ObjectDetection>?,
-        maskedBitmap: Bitmap?,
+        maskedBitmap: Bitmap?
     ) {
         val resultBitmap = maskedBitmap ?: originalBitmap
         binding.ivResultImage.setImageBitmap(resultBitmap)
@@ -536,6 +569,23 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
 
         lastProcessedBitmap = resultBitmap
         saveBitmapToFile(requireContext(), resultBitmap, "result.jpg")
+
+        // Calculate segmentation percentage directly from the model output
+        lifecycleScope.launch(Dispatchers.Default) {
+            val maskOutput = unetHelper.runInference(originalBitmap)
+            val percent = unetHelper.percentageSegmentation(maskOutput)
+
+            withContext(Dispatchers.Main) {
+                segmentationPercentageValue = percent.toFloat()
+                binding.tvSegmentationPercentageUpdateReport.text =
+                    "Persentase Segmentasi: ${String.format("%.2f", percent).replace(".", ",")}%"
+
+                // Now update severity with the correct segmentation value
+                val diameter = binding.tvDiameterUpdateReport.text.toString().toFloatOrNull() ?: 0f
+                val severity = classifySeverity(diameter, percent.toFloat())
+                binding.tvSeverityUpdateReport.text = "Tingkat Keparahan: $severity"
+            }
+        }
 
         // Convert ObjectDetection to Detection for StaticOverlayView
         val tfliteResults = detections?.map {
@@ -561,8 +611,14 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
             binding.staticOverlayView.setResults(tfliteResults, overlayWidth, overlayHeight)
         }
 
-        showToast("Potholes detected: ${detections?.size ?: 0}")
-        updateSeverityTextView()
+        showToast("Lubang jalan terdeteksi: ${detections?.size ?: 0}")
+
+        if (!detections.isNullOrEmpty()) {
+            processDetections(detections, originalBitmap)
+        } else {
+            binding.tvDiameterUpdateReport.setText("0.0")
+            Toast.makeText(requireContext(), "Tidak terdeteksi lubang jalan", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun saveBitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File {
@@ -571,6 +627,318 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
         }
         return file
+    }
+
+//    fun processDetections(
+//        detections: List<ObjectDetection>,
+//        bitmap: Bitmap
+//    ) {
+//        detections.forEachIndexed { index, detection ->
+//            Log.d("DebugBBox", "Index: $index, Label: ${detection.category.label}, BBox: ${detection.boundingBox}")
+//        }
+//
+//        val prefs = requireContext().getSharedPreferences("CalibrationPrefs", Context.MODE_PRIVATE)
+//        val pixelsPerCm = prefs.getFloat("pixels_per_cm", 36.72f)
+//
+//        var maxDiameterMm = 0f
+//        var detectedPotholes = 0
+//        val measurementMap = mutableMapOf<Int, String>()
+//
+//        Log.d("DiameterCalc", "=== Processing ${detections.size} detections ===")
+//
+//        detections.forEachIndexed { index, detection ->
+//            Log.d("ProcessLabel", "Processing label: ${detection.category.label}")
+//
+//            if (detection.category.label.contains("pothole", ignoreCase = true)
+//                || detection.category.label.contains("lubang", ignoreCase = true)
+//                || detection.category.label == "0"
+//                || detection.category.label == "Lubang") {
+//
+//                val bbox = detection.boundingBox
+//                val widthPixels = bbox.width()
+//                val heightPixels = bbox.height()
+//                val diameterPixels = (widthPixels + heightPixels) / 2
+//                val diameterMm = (diameterPixels / pixelsPerCm) * 10
+//
+//                Log.d("DiameterCalc", "Detection $index: width=$widthPixels, height=$heightPixels, diameterPx=$diameterPixels, diameterMm=$diameterMm")
+//
+//                if (diameterMm > maxDiameterMm) {
+//                    maxDiameterMm = diameterMm
+//                }
+//
+//                detectedPotholes++
+//                measurementMap[index] = "Ø ${String.format("%.2f", diameterMm).replace(".", ",")} cm"
+//
+//                Log.d("DiameterCalc", "POTHOLE #$detectedPotholes: diameter=${diameterMm}mm")
+//            }
+//        }
+//
+//        activity?.runOnUiThread {
+//            if (detectedPotholes > 0) {
+//                val reportDiameterMm = maxDiameterMm
+//                val diameterText = String.format("%.2f", reportDiameterMm)
+//                    .replace(".", ",")
+//
+//                // Update diameter field in UpdateReportFragment
+//                binding.tvDiameterUpdateReport.setText(diameterText)
+//
+//                binding.ivResultImage.post {
+//                    val tfliteResults = detections.map { detection ->
+//                        Detection.create(
+//                            detection.boundingBox,
+//                            listOf(Category.create(detection.category.label, null, detection.category.confidence))
+//                        )
+//                    }
+//
+//                    binding.staticOverlayView.setResultsWithMeasurements(
+//                        tfliteResults,
+//                        binding.ivResultImage.width,
+//                        binding.ivResultImage.height,
+//                        measurementMap
+//                    )
+//
+//                    Log.d("DiameterCalc", "Updated overlay with ${measurementMap.size} measurements")
+//                }
+//
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Max Diameter: $diameterText cm (dari $detectedPotholes lubang)",
+//                    Toast.LENGTH_LONG
+//                ).show()
+//            } else {
+//                binding.tvDiameterUpdateReport.setText("0.0")
+//                Toast.makeText(requireContext(), "Tidak ada lubang terdeteksi", Toast.LENGTH_LONG).show()
+//            }
+//            updateSeverityTextView()
+//        }
+//    }
+
+//    fun processDetections(
+//        detections: List<ObjectDetection>,
+//        bitmap: Bitmap
+//    ) {
+//        val prefs = requireContext().getSharedPreferences("CalibrationPrefs", Context.MODE_PRIVATE)
+//        val pixelsPerCm = prefs.getFloat("pixels_per_cm", 36.72f)
+//
+//        // Calculate scaling factor between original image and YOLO input
+//        val yoloInputSize = 640f  // YOLO's input size
+//        val originalSize = bitmap.width.coerceAtLeast(bitmap.height).toFloat()
+//        val scaleFactor = originalSize / yoloInputSize
+//
+//        // Adjust pixels per cm for the YOLO-processed image
+//        val adjustedPixelsPerCm = pixelsPerCm / scaleFactor
+//
+//        android.util.Log.d("Calibration", "Original: ${bitmap.width}x${bitmap.height}, Scale: $scaleFactor")
+//        android.util.Log.d("Calibration", "Original pixels/cm: $pixelsPerCm, Adjusted: $adjustedPixelsPerCm")
+//
+//        var maxDiameterCm = 0f
+//        var detectedPotholes = 0
+//        val measurementMap = mutableMapOf<Int, String>()
+//
+//        detections.forEachIndexed { index, detection ->
+//            if (detection.category.label.contains("pothole", ignoreCase = true) ||
+//                detection.category.label.contains("lubang", ignoreCase = true) ||
+//                detection.category.label == "0" ||
+//                detection.category.label == "Lubang"
+//            ) {
+//                val bbox = detection.boundingBox
+//                val widthPixels = bbox.width()
+//                val heightPixels = bbox.height()
+//
+//                val widthCm = widthPixels / adjustedPixelsPerCm
+//                val heightCm = heightPixels / adjustedPixelsPerCm
+//
+//                // Use average of width and height as requested
+//                val diameterPixels = kotlin.math.sqrt((widthPixels * widthPixels + heightPixels * heightPixels).toDouble()).toFloat()
+//                val diameterCm = diameterPixels / adjustedPixelsPerCm
+//
+//                android.util.Log.d(
+//                    "DiameterCalc",
+//                    "Detection $index: width=$widthPixels, height=$heightPixels, diameterPx=$diameterPixels, diameterCm=$diameterCm"
+//                )
+//
+//                if (diameterCm > maxDiameterCm) {
+//                    maxDiameterCm = diameterCm
+//                }
+//
+//                detectedPotholes++
+////                measurementMap[index] = "Ø ${String.format("%.2f", diameterCm).replace(".", ",")} cm"
+//                measurementMap[index] = "Ø (W: ${String.format("%.2f", widthCm).replace(".", ",")} × H: ${String.format("%.2f", heightCm).replace(".", ",")})"
+//            }
+//        }
+//
+//        activity?.runOnUiThread {
+//            if (detectedPotholes > 0) {
+//                val diameterText = String.format("%.2f", maxDiameterCm)
+//                    .replace(".", ",")
+//                binding.tvDiameterUpdateReport.setText(diameterText)
+//
+//                // Convert ObjectDetection to Detection for StaticOverlayView
+//                val tfliteResults = detections.map { detection ->
+//                    Detection.create(
+//                        detection.boundingBox,
+//                        listOf(
+//                            Category.create(
+//                                detection.category.label,
+//                                null,
+//                                detection.category.confidence
+//                            )
+//                        )
+//                    )
+//                }
+//
+//                // Update the overlay with measurements
+//                binding.ivResultImage.post {
+//                    binding.staticOverlayView.setResultsWithMeasurements(
+//                        tfliteResults,
+//                        binding.ivResultImage.width,
+//                        binding.ivResultImage.height,
+//                        measurementMap
+//                    )
+//                }
+//
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Lubang Jalan Terdeteksi: $detectedPotholes",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//
+//                // Set number of holes detected
+//                binding.tvHolesCountUpdateReport.setText(detectedPotholes.toString())
+//
+//                // Trigger severity calculation
+//                updateSeverityTextView()
+//            } else {
+//                binding.tvDiameterUpdateReport.setText("0,0")
+//                binding.tvHolesCountUpdateReport.setText("0")
+//                binding.staticOverlayView.setResults(emptyList(), 0, 0)
+//
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Tidak ada lubang terdeteksi",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//        }
+//    }
+
+    fun processDetections(
+        detections: List<ObjectDetection>,
+        bitmap: Bitmap
+    ) {
+        val prefs = requireContext().getSharedPreferences("CalibrationPrefs", Context.MODE_PRIVATE)
+        val basePixelsPerCm = prefs.getFloat("pixels_per_cm", 36.72f)  // Calibrated for 3120px
+        val calibrationReferenceSize = 3120f  // Reference size used for calibration
+
+        // Get dimensions of the original image
+        val originalWidth = bitmap.width.toFloat()
+        val originalHeight = bitmap.height.toFloat()
+
+        // YOLO always uses 640x640 input
+        val yoloInputSize = 640f
+
+        // Calculate scaling factors
+        val scaleX = originalWidth / yoloInputSize
+        val scaleY = originalHeight / yoloInputSize
+
+        // Calculate the scale ratio between calibration reference image and current image
+        val imageToCalibrationRatio = kotlin.math.max(originalWidth, originalHeight) / calibrationReferenceSize
+
+        // Calculate the pixels per cm for the current image size
+        val currentImagePixelsPerCm = basePixelsPerCm * imageToCalibrationRatio
+
+        // Calculate the pixels per cm in YOLO space (640x640)
+        val yoloPixelsPerCm = currentImagePixelsPerCm / kotlin.math.max(scaleX, scaleY)
+
+        Log.d("Calibration", "Original image: ${bitmap.width}x${bitmap.height}")
+        Log.d("Calibration", "Scale factors: X=$scaleX, Y=$scaleY")
+        Log.d("Calibration", "Base calibration: $basePixelsPerCm pixels/cm (at 3120px)")
+        Log.d("Calibration", "Current image calibration: $currentImagePixelsPerCm pixels/cm")
+        Log.d("Calibration", "YOLO space calibration: $yoloPixelsPerCm pixels/cm (at 640px)")
+
+        var maxDiameterCm = 0f
+        var detectedPotholes = 0
+        val measurementMap = mutableMapOf<Int, String>()
+
+        detections.forEachIndexed { index, detection ->
+            if (detection.category.label.contains("pothole", ignoreCase = true) ||
+                detection.category.label.contains("lubang", ignoreCase = true) ||
+                detection.category.label == "0" ||
+                detection.category.label == "Lubang"
+            ) {
+                val bbox = detection.boundingBox
+
+                // YOLO returns coordinates in 640x640 space
+                val widthPixelsYolo = bbox.width()
+                val heightPixelsYolo = bbox.height()
+
+                // Convert to cm using the calibration for YOLO space
+                val widthCm = widthPixelsYolo / yoloPixelsPerCm
+                val heightCm = heightPixelsYolo / yoloPixelsPerCm
+
+                // Calculate diagonal using Pythagorean theorem
+                val diagonalPixelsYolo = kotlin.math.sqrt(
+                    (widthPixelsYolo * widthPixelsYolo + heightPixelsYolo * heightPixelsYolo).toDouble()
+                ).toFloat()
+                val diagonalCm = diagonalPixelsYolo / yoloPixelsPerCm
+
+                Log.d(
+                    "DiameterCalc",
+                    "Detection $index: width=${widthPixelsYolo}px (${widthCm}cm), " +
+                            "height=${heightPixelsYolo}px (${heightCm}cm), diagonal=${diagonalCm}cm"
+                )
+
+                if (diagonalCm > maxDiameterCm) {
+                    maxDiameterCm = diagonalCm
+                }
+
+                detectedPotholes++
+                measurementMap[index] = "Ø (W: ${String.format("%.2f", widthCm).replace(".", ",")} × H: ${String.format("%.2f", heightCm).replace(".", ",")})"
+            }
+        }
+
+        activity?.runOnUiThread {
+            if (detectedPotholes > 0) {
+                val diameterText = String.format("%.2f", maxDiameterCm)
+                    .replace(".", ",")
+                binding.tvDiameterUpdateReport.setText(diameterText)
+
+                // Convert ObjectDetection to Detection for StaticOverlayView
+                val tfliteResults = detections.map { detection ->
+                    Detection.create(
+                        detection.boundingBox,
+                        listOf(
+                            Category.create(
+                                detection.category.label,
+                                null,
+                                detection.category.confidence
+                            )
+                        )
+                    )
+                }
+
+                // Update the overlay with measurements
+                binding.ivResultImage.post {
+                    binding.staticOverlayView.setResultsWithMeasurements(
+                        tfliteResults,
+                        binding.ivResultImage.width,
+                        binding.ivResultImage.height,
+                        measurementMap
+                    )
+                }
+
+                // Set number of holes detected
+                binding.tvHolesCountUpdateReport.setText(detectedPotholes.toString())
+
+                // Trigger severity calculation
+                updateSeverityTextView()
+            } else {
+                binding.tvDiameterUpdateReport.setText("0,0")
+                binding.tvHolesCountUpdateReport.setText("0")
+                binding.staticOverlayView.setResults(emptyList(), 0, 0)
+                Toast.makeText(requireContext(), "Tidak ada lubang terdeteksi", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun showToast(message: String) {

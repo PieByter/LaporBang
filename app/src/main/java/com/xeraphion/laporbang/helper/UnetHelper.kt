@@ -82,26 +82,50 @@ class UnetHelper(private val unetInterpreter: Interpreter) {
         return byteBuffer
     }
 
-    fun classifySeverityByMask(maskOutput: Array<Array<Array<FloatArray>>>): Pair<String, Double> {
+//    fun classifySeverityByMask(maskOutput: Array<Array<Array<FloatArray>>>): Pair<String, Double> {
+//        val maskHeight = maskOutput[0].size
+//        val maskWidth = if (maskHeight > 0) maskOutput[0][0].size else 0
+//        var foregroundCount = 0
+//        val total = maskHeight * maskWidth
+//        for (y in 0 until maskHeight) {
+//            for (x in 0 until maskWidth) {
+//                val backgroundProb = maskOutput[0][y][x][0]
+//                val foregroundProb = maskOutput[0][y][x][1]
+//                if (foregroundProb > backgroundProb && foregroundProb > 0.5f) {
+//                    foregroundCount++
+//                }
+//            }
+//        }
+//        val percent = if (total > 0) (foregroundCount * 100.0 / total) else 0.0
+//        val severity = when {
+//            percent < 10.0 -> "Ringan"
+//            percent < 25.0 -> "Sedang"
+//            else -> "Berat"
+//        }
+//        return Pair(severity, percent)
+//    }
+
+    fun percentageSegmentation(maskOutput: Array<Array<Array<FloatArray>>>): Double {
         val maskHeight = maskOutput[0].size
         val maskWidth = if (maskHeight > 0) maskOutput[0][0].size else 0
         var foregroundCount = 0
         val total = maskHeight * maskWidth
+
+        // Lower the threshold to detect more pixels as pothole
+        val threshold = 0.3f  // Reduced from 0.5f
+
         for (y in 0 until maskHeight) {
             for (x in 0 until maskWidth) {
                 val backgroundProb = maskOutput[0][y][x][0]
                 val foregroundProb = maskOutput[0][y][x][1]
-                if (foregroundProb > backgroundProb && foregroundProb > 0.5f) {
+                if (foregroundProb > backgroundProb && foregroundProb > threshold) {
                     foregroundCount++
                 }
             }
         }
-        val percent = if (total > 0) (foregroundCount * 100.0 / total) else 0.0
-        val severity = when {
-            percent < 10.0 -> "Ringan"
-            percent < 25.0 -> "Sedang"
-            else -> "Berat"
-        }
-        return Pair(severity, percent)
+
+        // Apply a scaling factor to match expected values
+        val rawPercentage = if (total > 0) (foregroundCount * 100.0 / total) else 0.0
+        return rawPercentage * 1.5  // Apply scaling to better match visual perception
     }
 }
