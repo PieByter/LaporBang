@@ -111,8 +111,7 @@ class UnetHelper(private val unetInterpreter: Interpreter) {
         var foregroundCount = 0
         val total = maskHeight * maskWidth
 
-        // Lower the threshold to detect more pixels as pothole
-        val threshold = 0.3f  // Reduced from 0.5f
+        val threshold = 0.3f
 
         for (y in 0 until maskHeight) {
             for (x in 0 until maskWidth) {
@@ -126,6 +125,6 @@ class UnetHelper(private val unetInterpreter: Interpreter) {
 
         // Apply a scaling factor to match expected values
         val rawPercentage = if (total > 0) (foregroundCount * 100.0 / total) else 0.0
-        return rawPercentage * 1.5  // Apply scaling to better match visual perception
+        return rawPercentage * 1.5
     }
 }

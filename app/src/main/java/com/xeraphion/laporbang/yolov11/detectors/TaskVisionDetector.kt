@@ -22,7 +22,7 @@ class TaskVisionDetector(
 //                MODEL_YOLO -> "yolov11_float32.tflite"
 //                else -> "yolov11_float32.tflite"
 //            }
-        val modelName = "best_float32.tflite"
+        val modelName = "model_yolov11.tflite"
 
         objectDetector = ObjectDetector.createFromFileAndOptions(context, modelName, options)
 

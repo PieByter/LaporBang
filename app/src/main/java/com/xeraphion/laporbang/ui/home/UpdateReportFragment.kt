@@ -529,7 +529,7 @@ class UpdateReportFragment : Fragment(), StaticDetectorHelper.DetectorListener {
     private fun loadUnetModel(): Interpreter {
         return try {
             val assetManager = requireContext().assets
-            val fd = assetManager.openFd("unet_train.tflite")
+            val fd = assetManager.openFd("model_unet.tflite")
             val inputStream = FileInputStream(fd.fileDescriptor)
             val channel = inputStream.channel
             val startOffset = fd.startOffset
