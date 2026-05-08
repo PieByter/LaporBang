@@ -42,16 +42,26 @@ AI-powered mobile app for reporting road potholes. Uses YOLOv11 for pothole dete
 ## Getting Started
 1. Clone repository.
 2. Place model files in `app/src/main/assets/models/` (or configure remote download).
-3. Configure API base URL and tokens in `local.properties` or an `.env`-style config.
+3. Configure local secrets (do not commit real keys):
+   - Copy entries from `local.defaults.properties` into `local.properties`.
+   - Set at least `MAPS_API_KEY`.
+   - Optionally override `API_BASE_URL`.
+   - You can also provide values via environment variables with the same names.
 4. Build & run:
    - Android Studio: Build > Make Project.
    - CLI: `./gradlew assembleDebug` (or `gradlew.bat` on Windows).
 
 ## Configuration
-- `API_BASE_URL`: REST endpoint.
+- `MAPS_API_KEY`: Google Maps API key (loaded from `local.properties` or env var).
+- `API_BASE_URL`: REST endpoint (loaded from `local.properties` or env var, default `https://laporbang.vercel.app`).
 - `API_TOKEN` or auth credentials.
 - `MODEL_SOURCE`: `assets` or `remote`.
 - `OFFLINE_SYNC`: enable/disable background retries.
+
+## Secret Safety
+- Never commit real API keys/tokens to Git.
+- `local.properties` is gitignored in this project and should store machine-local secrets.
+- If a key was exposed in history, rotate/revoke it immediately in the provider console.
 
 ## Testing
 - Unit tests: `./gradlew test`

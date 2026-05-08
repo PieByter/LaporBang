@@ -5,24 +5,24 @@
         android:id="@+id/nav_location"
         android:icon="@drawable/ic_location"
         android:enabled="true"
-        android:title="Lokasi" />
+        android:title="@string/menu_location" />
 
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_main_page"
         android:enabled="true"
-        android:title="Laporan" />
+        android:title="@string/menu_reports" />
 
     <item
         android:id="@+id/nav_camera"
         android:icon="@drawable/ic_camera_botnav"
         android:enabled="true"
-        android:title="Kamera" />
+        android:title="@string/menu_camera" />
 
     <item
         android:id="@+id/nav_account"
         android:icon="@drawable/ic_account"
         android:enabled="true"
-        android:title="Akun" />
+        android:title="@string/menu_account" />
 
 </menu>

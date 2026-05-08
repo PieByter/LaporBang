@@ -5,13 +5,13 @@
     <item
         android:id="@+id/action_sorted_by"
         android:icon="@drawable/ic_arrow_down"
-        android:title="Sorted By"
+        android:title="@string/menu_sorted_by"
         app:showAsAction="ifRoom|withText" />
 
     <item
         android:id="@+id/action_filter"
         android:icon="@drawable/ic_filter"
-        android:title="Filter"
+        android:title="@string/menu_filter"
         app:showAsAction="ifRoom|withText" />
 
 </menu>

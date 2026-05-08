@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,12 +7,28 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("androidx.navigation.safeargs")
-    id ("de.undercouch.download")
+    id("de.undercouch.download")
+}
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use(::load)
+    }
+}
+
+fun readConfigValue(name: String, defaultValue: String? = null): String {
+    return localProperties.getProperty(name)
+        ?: System.getenv(name)
+        ?: defaultValue
+        ?: throw GradleException(
+            "Missing required config '$name'. Set it in local.properties or as environment variable."
+        )
 }
 
 android {
     namespace = "com.xeraphion.laporbang"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.xeraphion.laporbang"
@@ -20,7 +38,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "MAPS_API_KEY", "\"AIzaSyCeocl50YzPPAfVAeZL-HnB48gTFb2YV2E\"")
+
+        val mapsApiKey = readConfigValue("MAPS_API_KEY", "REPLACE_WITH_LOCAL_MAPS_KEY")
+        val apiBaseUrl = readConfigValue("API_BASE_URL", "https://laporbang.vercel.app")
+
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
+        buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
     }
 
     buildTypes {
@@ -38,6 +61,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += "-Xskip-metadata-version-check"
     }
 
     buildFeatures {
@@ -59,7 +83,7 @@ android {
     }
 
     androidResources {
-        noCompress("tflite")
+        noCompress += "tflite"
     }
 
     externalNativeBuild {
@@ -88,9 +112,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Core Android dependencies
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.annotation)
-    implementation(libs.androidx.constraintlayout)
 
     // Material Components
     implementation(libs.material)
@@ -113,11 +135,11 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
 
     // Retrofit and OkHttp for networking
+    implementation(platform(libs.okhttp.bom))
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-    implementation(platform(libs.okhttp.bom))
 
     // Glide for image loading
     implementation(libs.glide)
@@ -131,7 +153,7 @@ dependencies {
 
     // Google Play Services
     implementation(libs.play.services.maps)
-    implementation("com.google.maps.android:android-maps-utils:2.0.1")
+    implementation("com.google.maps.android:android-maps-utils:4.3.0")
     implementation(libs.play.services.location)
 
     // Paging library
@@ -158,9 +180,6 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
-    // Dependency Injection with Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
 
     // Room database
     implementation(libs.androidx.room.runtime)
@@ -216,9 +235,9 @@ dependencies {
     implementation("org.tensorflow:tensorflow-lite-gpu:2.16.1")
     implementation("com.google.ai.edge.litert:litert-gpu-api:1.2.0")
 
-    implementation("org.yaml:snakeyaml:1.29")
+    implementation("org.yaml:snakeyaml:2.6")
     // Maps SDK for Android KTX Library
-    implementation ("com.google.maps.android:maps-ktx:3.0.0")
+    implementation("com.google.maps.android:maps-ktx:3.0.0")
 
     // Maps SDK for Android Utility Library KTX Library
     implementation("com.google.maps.android:maps-utils-ktx:3.0.0")

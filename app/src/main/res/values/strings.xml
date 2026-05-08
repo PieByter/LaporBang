@@ -9,6 +9,93 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
 
+    <string name="register_title_line1">Hey there!\nReady to</string>
+    <string name="register_title_line2">dive in?</string>
+    <string name="register_username">Username</string>
+    <string name="register_confirm_password">Konfirmasi Password</string>
+    <string name="register_create_account">Daftar Akun</string>
+    <string name="register_have_account">Sudah memiliki akun?</string>
+    <string name="register_login_now">Login Sekarang</string>
+    <string name="login_no_account">Tidak punya akun?</string>
+    <string name="login_sign_up">Daftar Akun</string>
+
+    <string name="camera_capture_images">Capture Images</string>
+    <string name="camera_switch_camera">Switch Camera</string>
+
+    <string name="menu_location">Lokasi</string>
+    <string name="menu_reports">Laporan</string>
+    <string name="menu_camera">Kamera</string>
+    <string name="menu_account">Akun</string>
+    <string name="menu_sorted_by">Sorted By</string>
+    <string name="menu_filter">Filter</string>
+
+    <!-- Account Fragment -->
+    <string name="account_profile_page">Laman Profil</string>
+    <string name="account_username">Username</string>
+    <string name="account_email">nama@gmail.com</string>
+    <string name="account_joined_date">Tanggal Bergabung</string>
+    <string name="account_edit_profile">Edit Profil</string>
+    <string name="account_logout">Logout</string>
+    <string name="account_copyright">2025 @Pieter Tanoto</string>
+
+    <!-- Camera Fragment -->
+    <string name="camera_image_alt">Gambar</string>
+
+    <!-- Home Fragment -->
+    <string name="home_reports_description">Potholes Reports</string>
+    <string name="fab_description">TODO</string>
+
+    <!-- Detail Home Fragment -->
+    <string name="detail_coordinates">Koordinat : Lat, Lng</string>
+    <string name="detail_report_title">Judul Laporan Lubang</string>
+    <string name="detail_label_user">User</string>
+    <string name="detail_date_format">dd-mm-yyyy</string>
+    <string name="detail_holes_count">Jumlah Lubang : 3</string>
+    <string name="detail_segmentation_percentage">Persentase Segmentasi : 50%</string>
+    <string name="detail_diameter">Diameter : 25 cm</string>
+    <string name="detail_depth">Depth : 5 cm</string>
+    <string name="detail_severity_level">Tingkat Keparahan</string>
+    <string name="detail_update_report">Perbaharui Laporan</string>
+    <string name="detail_delete_report">Hapus Laporan</string>
+
+    <!-- Edit Account Fragment -->
+    <string name="edit_profile_title">Edit Profil Anda di sini</string>
+    <string name="edit_profile_hint_username">Username</string>
+    <string name="edit_profile_hint_old_password">Password Lama</string>
+    <string name="edit_profile_hint_new_password">Password Baru</string>
+    <string name="edit_profile_gallery_button">Gallery Button</string>
+    <string name="edit_profile_camera_button">Camera Button</string>
+    <string name="edit_profile_save">Save Profile</string>
+
+    <!-- Report Fragment -->
+    <string name="report_coordinates">Koordinat : </string>
+    <string name="report_title_hint">Judul Laporan</string>
+    <string name="report_gallery_button">Gallery Button</string>
+    <string name="report_camera_button">Camera Button</string>
+    <string name="report_note">Catatan : Foto dari jarak 1 meter diatas permukaan tanah tepat diatas lubang jalan untuk mendapatkan pengukuran yang lebih akurat  !</string>
+    <string name="report_input_image_label">Gambar Inputan</string>
+    <string name="report_output_image_label">Hasil Analisis</string>
+    <string name="report_analyze_button">Analisis Gambar</string>
+    <string name="report_severity_label">Tingkat Keparahan:</string>
+    <string name="report_segmentation_percentage">Persentase Segmentasi: </string>
+    <string name="report_holes_count_hint">Jumlah Lubang</string>
+    <string name="report_diameter_hint">Diameter Lubang (cm)</string>
+    <string name="report_depth_hint">Kedalaman Lubang (cm)</string>
+    <string name="report_submit_button">Laporkan Lubang</string>
+    <string name="report_map_view">Map View</string>
+
+    <!-- Item Report -->
+    <string name="item_report_title">Judul Laporan Lubang</string>
+    <string name="item_report_user_icon">User icon</string>
+    <string name="item_report_username">Username</string>
+    <string name="item_report_date_icon">Date Icon</string>
+    <string name="item_report_date_format">dd-mm-yyyy</string>
+    <string name="item_report_severity">Tingkat Keparahan : Sedang</string>
+    <string name="item_report_holes_count">Jumlah Lubang : 1</string>
+
+    <!-- Detail Home Fragment -->
+    <string name="detail_map_view">Preview Potholes Location</string>
+
     <string name="alt_bottom_sheet_chevron">Bottom sheet expandable indicator</string>
 
     <string name="alt_bottom_sheet_max_results_button_minus">Decreasing maxium detected results

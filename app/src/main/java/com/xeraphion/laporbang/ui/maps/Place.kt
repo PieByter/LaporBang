@@ -14,4 +14,5 @@ data class Place(
     override fun getPosition(): LatLng = latLng
     override fun getTitle(): String = name
     override fun getSnippet(): String = address
+    override fun getZIndex(): Float = 0f
 }

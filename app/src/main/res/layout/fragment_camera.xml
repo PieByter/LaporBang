@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="top"
-        android:contentDescription="Gambar"
+        android:contentDescription="@string/camera_image_alt"
         android:src="@drawable/tfl_logo" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

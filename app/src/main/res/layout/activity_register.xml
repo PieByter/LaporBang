@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/clash_grotesk_regular"
-            android:text="Hey there!\nReady to"
+            android:text="@string/register_title_line1"
             android:textColor="@color/white"
             android:textSize="32sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="-18dp"
             android:fontFamily="@font/clash_grotesk_regular"
-            android:text="dive in?"
+            android:text="@string/register_title_line2"
             android:textColor="@color/light_cream"
             android:textSize="32sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_register_title"
@@ -82,7 +82,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/clash_grotesk_regular"
-                    android:text="Username"
+                    android:text="@string/register_username"
                     android:textColor="@color/light_cream"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -110,11 +110,12 @@
                         android:backgroundTint="@color/light_cream"
                         android:backgroundTintMode="add"
                         android:fontFamily="@font/clash_grotesk"
-                        android:hint="Username"
+                        android:hint="@string/register_username"
                         android:inputType="text"
                         android:maxLength="20"
                         android:paddingVertical="18dp"
                         android:paddingStart="50dp"
+                        android:textColor="@color/black"
                         app:errorEnabled="true"
                         tools:ignore="DuplicateSpeakableTextCheck,RtlSymmetry,TextContrastCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -125,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/clash_grotesk_regular"
-                    android:text="Email"
+                    android:text="@string/prompt_email"
                     android:textColor="@color/light_cream"
                     app:layout_constraintStart_toStartOf="@id/tv_username"
                     app:layout_constraintTop_toBottomOf="@id/textInputUsernameLogin" />
@@ -153,10 +154,11 @@
                         android:backgroundTint="@color/light_cream"
                         android:backgroundTintMode="add"
                         android:fontFamily="@font/clash_grotesk"
-                        android:hint="Email"
+                        android:hint="@string/prompt_email"
                         android:inputType="textEmailAddress"
                         android:paddingVertical="18dp"
                         android:paddingStart="50dp"
+                        android:textColor="@color/black"
                         app:errorEnabled="true"
                         tools:ignore="DuplicateSpeakableTextCheck,RtlSymmetry,TextContrastCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -167,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/clash_grotesk_regular"
-                    android:text="Password"
+                    android:text="@string/prompt_password"
                     android:textColor="@color/light_cream"
                     app:layout_constraintStart_toStartOf="@id/tv_username"
                     app:layout_constraintTop_toBottomOf="@id/textInputEmailLogin" />
@@ -200,6 +202,7 @@
                         android:inputType="textPassword"
                         android:paddingVertical="18dp"
                         android:paddingStart="50dp"
+                        android:textColor="@color/black"
                         app:errorEnabled="true"
                         tools:ignore="DuplicateClickableBoundsCheck,RtlSymmetry" />
 
@@ -211,7 +214,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/clash_grotesk_regular"
-                    android:text="Konfirmasi Password"
+                    android:text="@string/register_confirm_password"
                     android:textColor="@color/light_cream"
                     app:layout_constraintStart_toStartOf="@id/tv_username"
                     app:layout_constraintTop_toBottomOf="@id/textInputPasswordLogin" />
@@ -240,10 +243,11 @@
                         android:backgroundTint="@color/light_cream"
                         android:backgroundTintMode="add"
                         android:fontFamily="@font/clash_grotesk"
-                        android:hint="Konfirmasi Password"
+                        android:hint="@string/register_confirm_password"
                         android:inputType="textPassword"
                         android:paddingVertical="18dp"
                         android:paddingStart="50dp"
+                        android:textColor="@color/black"
                         app:errorEnabled="true"
                         tools:ignore="DuplicateClickableBoundsCheck,RtlSymmetry" />
 
@@ -293,7 +297,7 @@
                     android:backgroundTint="@color/light_cream"
                     android:fontFamily="@font/clash_grotesk_regular"
                     android:paddingVertical="16dp"
-                    android:text="Daftar Akun"
+                    android:text="@string/register_create_account"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="16sp"
@@ -311,7 +315,7 @@
                     android:fontFamily="@font/clash_grotesk_regular"
                     android:gravity="center"
                     android:minHeight="48dp"
-                    android:text="Sudah memiliki akun?"
+                    android:text="@string/register_have_account"
                     android:textColor="@color/light_cream"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="@id/btn_register"
@@ -326,7 +330,7 @@
                     android:fontFamily="@font/clash_grotesk_regular"
                     android:gravity="center"
                     android:minHeight="48dp"
-                    android:text="Login Sekarang"
+                    android:text="@string/register_login_now"
                     android:textColor="@color/light_cream"
                     android:textSize="16sp"
                     app:layout_constraintStart_toEndOf="@id/tv_additional"
